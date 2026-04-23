@@ -3,14 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Toner Inventory Tracker v4</title>
-
-<!-- ✅ FIX 1: Firebase v8 SDKs loaded FIRST, in correct order, NO type="module" -->
+<title>Toner Inventory Tracker</title>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-
-<!-- ✅ FIX 2: Firebase initialized in its OWN script tag, AFTER SDK scripts above -->
 <script>
   const firebaseConfig = {
     apiKey: "AIzaSyADkSiMt8FNmDM_UsTrtVqEzxnol6U-jn4",
@@ -21,19 +17,12 @@
     appId: "1:325932367848:web:8ca756fbf48eae5cf16e5d",
     measurementId: "G-JEH5JP8C0M"
   };
-
-  // ✅ FIX 3: Guard against double-initialization (safe reload)
-  if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-  }
-
+  if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
   const auth = firebase.auth();
   const db   = firebase.firestore();
 </script>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
-
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -46,105 +35,114 @@
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
      background:var(--bg);color:var(--text);min-height:100vh}
 
-/* ── AUTH BOX ── */
-#auth-screen{
-  min-height:100vh;display:flex;align-items:center;justify-content:center;
-  background:linear-gradient(135deg,#1e3a8a,#2563eb);padding:20px
-}
-#auth-box{
-  background:#fff;border-radius:14px;padding:32px 28px;
-  width:100%;max-width:380px;box-shadow:0 20px 60px rgba(0,0,0,.25)
-}
+/* ── AUTH ── */
+#auth-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#1e3a8a,#2563eb);padding:20px}
+#auth-box{background:#fff;border-radius:14px;padding:32px 28px;
+  width:100%;max-width:380px;box-shadow:0 20px 60px rgba(0,0,0,.25)}
 .auth-logo{width:52px;height:52px;background:var(--primary);border-radius:13px;
-           display:flex;align-items:center;justify-content:center;font-size:26px;
-           margin:0 auto 12px}
-.auth-title{font-size:20px;font-weight:800;text-align:center;color:var(--text);margin-bottom:4px}
+  display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 12px}
+.auth-title{font-size:20px;font-weight:800;text-align:center;margin-bottom:4px}
 .auth-sub{font-size:13px;color:var(--muted);text-align:center;margin-bottom:24px}
 .auth-field{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
-.auth-field label{font-size:11.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.auth-field label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
 .auth-field input{height:44px;padding:0 13px;border:1.5px solid var(--border);
   border-radius:8px;font-size:14px;outline:none;transition:border-color .15s}
 .auth-field input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,.12)}
 .auth-btns{display:flex;gap:10px;margin-top:6px}
 .auth-btns button{flex:1;height:44px;border-radius:8px;border:none;font-size:14px;
   font-weight:700;cursor:pointer;transition:all .15s}
-.btn-login{background:var(--primary);color:#fff}.btn-login:hover{background:var(--ph)}
+.btn-login {background:var(--primary);color:#fff}.btn-login:hover{background:var(--ph)}
 .btn-signup{background:#fff;color:var(--primary);border:2px solid var(--primary)!important}
 .btn-signup:hover{background:var(--purplel)}
-.auth-msg{min-height:20px;font-size:12.5px;font-weight:500;text-align:center;
-          margin-top:12px;padding:8px 12px;border-radius:7px;display:none}
+.auth-msg{font-size:12.5px;font-weight:500;text-align:center;margin-top:12px;
+  padding:8px 12px;border-radius:7px;display:none}
 .auth-msg.err{display:block;background:#fef2f2;color:var(--danger);border:1px solid #fecaca}
 .auth-msg.ok {display:block;background:#f0fdf4;color:var(--success);border:1px solid #bbf7d0}
-.auth-divider{text-align:center;font-size:12px;color:var(--muted);margin:14px 0 2px}
 
 /* ── HEADER ── */
 header{background:var(--card);border-bottom:1px solid var(--border);padding:0 16px;
-       display:flex;align-items:center;justify-content:space-between;height:60px;
-       box-shadow:var(--sh);position:sticky;top:0;z-index:100}
+  display:flex;align-items:center;justify-content:space-between;height:60px;
+  box-shadow:var(--sh);position:sticky;top:0;z-index:100}
 .hd-l{display:flex;align-items:center;gap:10px}
 .hd-logo{width:36px;height:36px;background:var(--primary);border-radius:9px;
-         display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+  display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
 .hd-title{font-size:16px;font-weight:700;line-height:1.2}
 .hd-sub{font-size:11px;color:var(--muted)}
-.hd-r{display:flex;align-items:center;gap:10px}
+.hd-r{display:flex;align-items:center;gap:8px}
 .hd-date{font-size:12px;color:var(--muted);white-space:nowrap}
 .hd-user{font-size:12px;color:var(--primary);font-weight:600;
-         background:#dbeafe;padding:3px 10px;border-radius:20px;
-         max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.pill{display:flex;align-items:center;gap:6px;border-radius:20px;padding:4px 10px;
-      font-size:11.5px;font-weight:600;white-space:nowrap}
+  background:#dbeafe;padding:3px 10px;border-radius:20px;
+  max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pill{display:flex;align-items:center;gap:5px;border-radius:20px;padding:3px 9px;
+  font-size:11px;font-weight:600;white-space:nowrap}
 .pill-green{background:#f0fdf4;border:1px solid #bbf7d0;color:var(--success)}
-.pill-dot{width:7px;height:7px;border-radius:50%;background:currentColor;animation:pulse 1.4s infinite}
+.pill-dot{width:6px;height:6px;border-radius:50%;background:currentColor;animation:pulse 1.4s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
-.logout-btn{height:34px;padding:0 12px;border-radius:8px;border:1px solid #fca5a5;
-            background:#fff;color:var(--danger);font-size:12px;font-weight:600;
-            cursor:pointer;display:flex;align-items:center;gap:5px;transition:all .15s}
+.logout-btn{height:32px;padding:0 11px;border-radius:8px;border:1px solid #fca5a5;
+  background:#fff;color:var(--danger);font-size:12px;font-weight:600;
+  cursor:pointer;display:flex;align-items:center;gap:4px;transition:all .15s}
 .logout-btn:hover{background:#fef2f2}
+
+/* sync status pill in header */
+.sync-pill{font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;
+  display:flex;align-items:center;gap:4px;white-space:nowrap}
+.sp-ok  {background:#f0fdf4;border:1px solid #bbf7d0;color:var(--success)}
+.sp-busy{background:#fef3c7;border:1px solid #fde68a;color:var(--warn)}
+.sp-err {background:#fef2f2;border:1px solid #fecaca;color:var(--danger)}
 
 /* ── LAYOUT ── */
 .wrap{max-width:1360px;margin:0 auto;padding:16px}
 
-/* SUMMARY */
+/* ── SUMMARY ── */
 .sum-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
 .s-card{background:var(--card);border:1px solid var(--border);border-radius:11px;
-        padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--sh)}
+  padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--sh)}
 .s-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;
-        justify-content:center;font-size:20px;flex-shrink:0}
+  justify-content:center;font-size:20px;flex-shrink:0}
 .ico-out{background:#dbeafe}.ico-ret{background:#dcfce7}.ico-pend{background:#fef3c7}
 .s-num{font-size:28px;font-weight:800;line-height:1}
 .s-lbl{font-size:11px;color:var(--muted);margin-top:2px}
 .c-out{color:var(--primary)}.c-ret{color:var(--success)}.c-pend{color:var(--warn)}
 
-/* SYNC PANEL */
-.sync-panel{background:linear-gradient(135deg,#ede9fe 0%,#f5f3ff 100%);
-            border:1px solid var(--purpleb);border-radius:11px;
-            padding:16px 18px;margin-bottom:16px;box-shadow:var(--sh)}
-.sync-title{font-size:13.5px;font-weight:700;color:var(--purple);
-            display:flex;align-items:center;gap:8px;margin-bottom:4px}
-.sync-desc{font-size:12px;color:#5b21b6;margin-bottom:14px;line-height:1.6}
+/* ── COLLAPSIBLE SYNC PANEL ── */
+.sync-panel{background:linear-gradient(135deg,#ede9fe,#f5f3ff);
+  border:1px solid var(--purpleb);border-radius:11px;margin-bottom:16px;box-shadow:var(--sh)}
+.sync-header{display:flex;align-items:center;justify-content:space-between;
+  padding:12px 16px;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
+.sync-header:hover{background:rgba(124,58,237,.04);border-radius:11px}
+.sync-header-left{display:flex;align-items:center;gap:8px}
+.sync-header-title{font-size:13px;font-weight:700;color:var(--purple)}
+.sync-header-badge{font-size:11px;color:#7c3aed;background:#ddd6fe;
+  padding:2px 8px;border-radius:20px;font-weight:600}
+.sync-toggle{font-size:18px;color:var(--purple);transition:transform .25s;line-height:1}
+.sync-toggle.open{transform:rotate(180deg)}
+.sync-body{padding:0 16px 16px;display:none}
+.sync-body.open{display:block}
+.sync-desc{font-size:11.5px;color:#5b21b6;margin-bottom:12px;line-height:1.6}
 .sync-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 .sync-box{background:#fff;border:1px solid var(--purpleb);border-radius:9px;
-          padding:14px;display:flex;flex-direction:column;gap:8px}
+  padding:13px;display:flex;flex-direction:column;gap:7px}
 .sync-box-title{font-size:12px;font-weight:700;color:var(--purple);
-                display:flex;align-items:center;gap:6px}
+  display:flex;align-items:center;gap:5px}
 .sync-box-desc{font-size:11px;color:var(--muted);line-height:1.5;flex:1}
-.sync-box-btns{display:flex;flex-direction:column;gap:6px}
+.sync-box-btns{display:flex;flex-direction:column;gap:5px}
 
-/* PANEL */
+/* ── PANEL ── */
 .panel{background:var(--card);border:1px solid var(--border);border-radius:11px;
-       padding:16px;margin-bottom:16px;box-shadow:var(--sh)}
+  padding:16px;margin-bottom:16px;box-shadow:var(--sh)}
 .panel-title{font-size:14px;font-weight:600;margin-bottom:12px;
-             display:flex;align-items:center;gap:8px}
+  display:flex;align-items:center;gap:8px}
 
-/* FEEDBACK */
+/* ── FEEDBACK ── */
 .lsb{display:flex;align-items:center;gap:10px;padding:9px 13px;border-radius:8px;
-     font-size:13px;font-weight:500;margin-bottom:12px;opacity:0;transition:opacity .25s;min-height:38px}
+  font-size:13px;font-weight:500;margin-bottom:12px;opacity:0;transition:opacity .25s;min-height:38px}
 .lsb.show{opacity:1}
 .lsb-ok  {background:#f0fdf4;border:1px solid #bbf7d0;color:#15803d}
 .lsb-warn{background:#fffbeb;border:1px solid #fde68a;color:#92400e}
 .lsb-err {background:#fef2f2;border:1px solid #fecaca;color:#991b1b}
 
-/* FORM */
+/* ── FORM ── */
 .form-row{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end}
 .fg{display:flex;flex-direction:column;gap:4px}
 .fg label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
@@ -160,23 +158,23 @@ header{background:var(--card);border-bottom:1px solid var(--border);padding:0 16
 .bc-row{display:flex;gap:8px;align-items:stretch}
 .bc-row input{flex:1;min-width:0}
 .cam-trigger{height:44px;width:48px;border-radius:8px;border:2px solid var(--primary);
-             background:#fff;color:var(--primary);font-size:20px;cursor:pointer;
-             display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
+  background:#fff;color:var(--primary);font-size:20px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
 .cam-trigger:hover,.cam-trigger:active{background:var(--primary);color:#fff}
 .scan-hint{font-size:11px;color:var(--muted);margin-top:8px;line-height:1.7}
 .kbd{background:#f1f5f9;border:1px solid #cbd5e1;border-radius:4px;
-     padding:1px 5px;font-size:10.5px;font-family:monospace}
+  padding:1px 5px;font-size:10.5px;font-family:monospace}
 .mode-wrap{display:flex;border:1px solid var(--border);border-radius:8px;overflow:hidden;height:44px}
 .mode-btn{padding:0 18px;font-size:13.5px;font-weight:600;cursor:pointer;
-          border:none;background:#fff;color:var(--muted);transition:all .15s;white-space:nowrap}
+  border:none;background:#fff;color:var(--muted);transition:all .15s;white-space:nowrap}
 .mode-btn:hover{background:var(--bg)}
 .m-out{background:var(--primary)!important;color:#fff!important}
 .m-in {background:var(--success)!important;color:#fff!important}
 
-/* BUTTONS */
+/* ── BUTTONS ── */
 .btn{height:42px;padding:0 15px;border-radius:8px;border:none;font-size:13px;
-     font-weight:600;cursor:pointer;transition:all .15s;
-     display:inline-flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap}
+  font-weight:600;cursor:pointer;transition:all .15s;
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap}
 .btn-sm{height:34px;padding:0 12px;font-size:12px}
 .btn-xs{height:30px;padding:0 10px;font-size:11.5px}
 .btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--ph)}
@@ -187,23 +185,23 @@ header{background:var(--card);border-bottom:1px solid var(--border);padding:0 16
 .btn-purplel{background:#fff;color:var(--purple);border:1px solid var(--purpleb)}.btn-purplel:hover{background:var(--purplel)}
 .btn:disabled{opacity:.45;cursor:not-allowed}
 
-/* ACTION BAR */
+/* ── ACTION BAR ── */
 .act-bar{display:flex;justify-content:space-between;align-items:center;
-         margin-bottom:12px;flex-wrap:wrap;gap:8px}
+  margin-bottom:12px;flex-wrap:wrap;gap:8px}
 .act-l,.act-r{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .search-inp{height:36px;padding:0 12px;border:1px solid var(--border);
-            border-radius:7px;font-size:13px;outline:none;min-width:190px;background:#fff}
+  border-radius:7px;font-size:13px;outline:none;min-width:190px;background:#fff}
 .search-inp:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,.1)}
 .fil-sel{height:36px;padding:0 10px;border:1px solid var(--border);
-         border-radius:7px;font-size:13px;outline:none;background:#fff;cursor:pointer}
+  border-radius:7px;font-size:13px;outline:none;background:#fff;cursor:pointer}
 
-/* TABLE */
+/* ── TABLE ── */
 .tbl-wrap{border-radius:11px;border:1px solid var(--border);overflow:hidden;box-shadow:var(--sh)}
 .tbl-scroll{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:13px;background:#fff}
 thead th{background:#f8f9fb;padding:9px 13px;text-align:left;font-size:10.5px;
-         font-weight:600;color:var(--muted);text-transform:uppercase;
-         letter-spacing:.05em;border-bottom:1px solid var(--border);white-space:nowrap}
+  font-weight:600;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.05em;border-bottom:1px solid var(--border);white-space:nowrap}
 tbody tr{border-bottom:1px solid #f1f3f6;transition:background .1s}
 tbody tr:last-child{border-bottom:none}
 tbody tr:hover{background:#f8faff}
@@ -213,24 +211,24 @@ tr.row-ret:hover{background:#dcfce7!important}
 @keyframes rowFlash{0%{background:#dbeafe}100%{background:transparent}}
 tr.row-new{animation:rowFlash .9s ease}
 .badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;
-       border-radius:20px;font-size:11px;font-weight:600}
+  border-radius:20px;font-size:11px;font-weight:600}
 .bd-dot{width:6px;height:6px;border-radius:50%;background:currentColor}
 .bd-out{background:#dbeafe;color:#1d4ed8}
 .bd-ret{background:#dcfce7;color:#15803d}
 .bc-tag{background:#f1f5f9;padding:2px 7px;border-radius:5px;
-        font-family:monospace;font-size:12px;letter-spacing:.03em}
+  font-family:monospace;font-size:12px;letter-spacing:.03em}
 .empty{text-align:center;padding:48px 20px;color:var(--muted)}
 .empty .ei{font-size:38px;margin-bottom:10px}
 .empty p{font-size:13px}
 .tbl-foot{display:flex;justify-content:space-between;align-items:center;
-          padding:9px 13px;background:#f8f9fb;border-top:1px solid var(--border);
-          font-size:11.5px;color:var(--muted)}
+  padding:9px 13px;background:#f8f9fb;border-top:1px solid var(--border);
+  font-size:11.5px;color:var(--muted)}
 
-/* TOAST */
+/* ── TOAST ── */
 #toast-box{position:fixed;top:70px;right:16px;z-index:9999;
-           display:flex;flex-direction:column;gap:8px;pointer-events:none}
+  display:flex;flex-direction:column;gap:8px;pointer-events:none}
 .toast{padding:10px 14px;border-radius:8px;font-size:13px;font-weight:500;
-       box-shadow:0 4px 14px rgba(0,0,0,.15);max-width:300px;animation:tin .2s ease}
+  box-shadow:0 4px 14px rgba(0,0,0,.15);max-width:300px;animation:tin .2s ease}
 .t-ok{background:var(--success);color:#fff}
 .t-err{background:var(--danger);color:#fff}
 .t-warn{background:var(--warn);color:#fff}
@@ -238,48 +236,47 @@ tr.row-new{animation:rowFlash .9s ease}
 @keyframes tin {from{transform:translateX(110%);opacity:0}to{transform:translateX(0);opacity:1}}
 @keyframes tout{from{opacity:1}to{opacity:0;transform:translateX(110%)}}
 
-/* MODALS */
+/* ── MODALS ── */
 .modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);
-          z-index:1000;align-items:center;justify-content:center;padding:16px}
+  z-index:1000;align-items:center;justify-content:center;padding:16px}
 .modal-bg.open{display:flex}
 .modal{background:#fff;border-radius:12px;padding:24px;max-width:420px;
-       width:100%;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+  width:100%;box-shadow:0 20px 60px rgba(0,0,0,.2)}
 .modal h3{font-size:15px;margin-bottom:7px}
 .modal p{font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.6}
 .modal-btns{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
 .import-ta{width:100%;height:120px;border:1px solid var(--border);border-radius:8px;
-           padding:10px;font-size:12px;font-family:monospace;outline:none;resize:vertical}
+  padding:10px;font-size:12px;font-family:monospace;outline:none;resize:vertical}
 .import-ta:focus{border-color:var(--purple);box-shadow:0 0 0 3px rgba(124,58,237,.12)}
 .or-divider{display:flex;align-items:center;gap:10px;margin:10px 0;color:var(--muted);font-size:12px}
 .or-divider::before,.or-divider::after{content:'';flex:1;height:1px;background:var(--border)}
-.file-drop{border:2px dashed var(--purpleb);border-radius:8px;padding:18px;text-align:center;
-           cursor:pointer;transition:all .15s;background:var(--purplel)}
+.file-drop{border:2px dashed var(--purpleb);border-radius:8px;padding:16px;text-align:center;
+  cursor:pointer;transition:all .15s;background:var(--purplel)}
 .file-drop:hover{border-color:var(--purple);background:#ddd6fe}
-.file-drop p{font-size:13px;color:var(--purple);font-weight:600;margin-top:6px}
+.file-drop p{font-size:13px;color:var(--purple);font-weight:600;margin-top:5px}
 .file-drop span{font-size:11px;color:var(--muted)}
 #file-import-input{display:none}
 .backup-list{max-height:200px;overflow-y:auto;display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
 .backup-item{display:flex;align-items:center;justify-content:space-between;
-             background:#f8f9fb;border:1px solid var(--border);border-radius:8px;
-             padding:9px 12px;gap:8px}
+  background:#f8f9fb;border:1px solid var(--border);border-radius:8px;padding:9px 12px;gap:8px}
 .backup-item-info{flex:1;min-width:0}
 .backup-item-name{font-size:12.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .backup-item-meta{font-size:11px;color:var(--muted);margin-top:2px}
 .backup-item-btns{display:flex;gap:6px;flex-shrink:0}
 .no-backups{text-align:center;padding:20px;color:var(--muted);font-size:13px}
 
-/* CAMERA */
+/* ── CAMERA ── */
 #cam-modal{padding:0;align-items:stretch;justify-content:stretch}
 #cam-modal.open{display:flex}
 .cam-wrap{display:flex;flex-direction:column;width:100%;height:100%;
-          max-width:540px;margin:0 auto;background:#000;position:relative}
+  max-width:540px;margin:0 auto;background:#000;position:relative}
 .cam-topbar{display:flex;align-items:center;justify-content:space-between;
-            padding:12px 16px;background:rgba(0,0,0,.7);position:absolute;top:0;left:0;right:0;z-index:10}
+  padding:12px 16px;background:rgba(0,0,0,.7);position:absolute;top:0;left:0;right:0;z-index:10}
 .cam-topbar-title{color:#fff;font-size:14px;font-weight:600}
 .cam-topbar-mode{padding:3px 10px;border-radius:20px;font-size:12px;font-weight:700}
 .cam-mode-out{background:#3b82f6;color:#fff}.cam-mode-in{background:#22c55e;color:#fff}
 .cam-close{width:34px;height:34px;border-radius:50%;border:none;background:rgba(255,255,255,.15);
-           color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+  color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .cam-close:hover{background:rgba(255,255,255,.3)}
 #cam-video{width:100%;height:100%;object-fit:cover;display:block}
 .cam-finder{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
@@ -290,15 +287,15 @@ tr.row-new{animation:rowFlash .9s ease}
 .cam-corner.bl{bottom:0;left:0;border-width:0 0 3px 3px;border-radius:0 0 0 3px}
 .cam-corner.br{bottom:0;right:0;border-width:0 3px 3px 0;border-radius:0 0 3px 0}
 .cam-scan-line{position:absolute;left:4px;right:4px;height:2px;background:rgba(37,99,235,.9);
-               box-shadow:0 0 8px rgba(37,99,235,.8);animation:scanMove 2s linear infinite}
+  box-shadow:0 0 8px rgba(37,99,235,.8);animation:scanMove 2s linear infinite}
 @keyframes scanMove{0%{top:4px}50%{top:calc(100% - 6px)}100%{top:4px}}
 .cam-result{position:absolute;bottom:80px;left:50%;transform:translateX(-50%);
-            background:rgba(22,163,74,.92);color:#fff;padding:10px 20px;border-radius:30px;
-            font-size:14px;font-weight:600;opacity:0;transition:opacity .2s;
-            white-space:nowrap;max-width:90%;overflow:hidden;text-overflow:ellipsis;text-align:center}
+  background:rgba(22,163,74,.92);color:#fff;padding:10px 20px;border-radius:30px;
+  font-size:14px;font-weight:600;opacity:0;transition:opacity .2s;
+  white-space:nowrap;max-width:90%;overflow:hidden;text-overflow:ellipsis;text-align:center}
 .cam-result.show{opacity:1}
 .cam-bottombar{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.75);
-               padding:12px 16px;display:flex;flex-direction:column;gap:4px}
+  padding:12px 16px;display:flex;flex-direction:column;gap:4px}
 .cam-status{color:#fff;font-size:12.5px;text-align:center;min-height:18px}
 .cam-hint  {color:rgba(255,255,255,.55);font-size:11px;text-align:center}
 .cam-canvas{display:none}
@@ -314,15 +311,12 @@ tr.row-new{animation:rowFlash .9s ease}
 </head>
 <body>
 
-<!-- ══════════════════════════════════════
-     AUTH SCREEN  (shown when logged out)
-══════════════════════════════════════ -->
+<!-- AUTH SCREEN -->
 <div id="auth-screen">
   <div id="auth-box">
     <div class="auth-logo">📦</div>
     <div class="auth-title">Toner Inventory Tracker</div>
     <div class="auth-sub">Sign in or create an account to continue</div>
-
     <div class="auth-field">
       <label>Email Address</label>
       <input type="email" id="auth-email" placeholder="you@example.com" autocomplete="email">
@@ -331,37 +325,29 @@ tr.row-new{animation:rowFlash .9s ease}
       <label>Password</label>
       <input type="password" id="auth-password" placeholder="Your password" autocomplete="current-password">
     </div>
-
-    <!-- ✅ FIX 4: Buttons call fixed functions, no alert() -->
     <div class="auth-btns">
       <button class="btn-login"  onclick="login()">🔐 Login</button>
       <button class="btn-signup" onclick="signup()">✏️ Sign Up</button>
     </div>
-
     <div class="auth-msg" id="auth-msg"></div>
-    <div class="auth-divider">Press Login if you already have an account</div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════
-     MAIN APP  (hidden until logged in)
-══════════════════════════════════════ -->
+<!-- MAIN APP -->
 <div id="main-app" style="display:none">
-
 <header>
   <div class="hd-l">
     <div class="hd-logo">📦</div>
     <div>
       <div class="hd-title">Toner Inventory Tracker</div>
-      <div class="hd-sub">Warehouse Management System — v4</div>
+      <div class="hd-sub">Warehouse Management System</div>
     </div>
   </div>
   <div class="hd-r">
-    <div class="pill pill-green"><span class="pill-dot"></span>Firebase Active</div>
-    <!-- Shows logged-in user email -->
+    <div class="pill pill-green"><span class="pill-dot"></span>Cloud Sync</div>
+    <div class="sync-pill sp-ok" id="sync-pill">✅ Synced</div>
     <div class="hd-user" id="hd-user"></div>
     <div class="hd-date" id="hd-date"></div>
-    <!-- ✅ FIX 5: Logout button added -->
     <button class="logout-btn" onclick="logout()">🚪 Logout</button>
   </div>
 </header>
@@ -378,33 +364,42 @@ tr.row-new{animation:rowFlash .9s ease}
       <div><div class="s-num c-pend" id="cnt-pend">0</div><div class="s-lbl">Pending Return</div></div></div>
   </div>
 
-  <!-- SYNC PANEL -->
+  <!-- COLLAPSIBLE SYNC PANEL -->
   <div class="sync-panel">
-    <div class="sync-title">🔄 Data Sync, Backup &amp; Restore</div>
-    <div class="sync-desc">Export a backup file and share it to sync between devices. Use Local Snapshots for quick in-browser saves.</div>
-    <div class="sync-grid">
-      <div class="sync-box">
-        <div class="sync-box-title">📤 Export / Share</div>
-        <div class="sync-box-desc">Download a .json backup and share it to sync another device.</div>
-        <div class="sync-box-btns">
-          <button class="btn btn-purple btn-xs" onclick="exportJSON()">⬇️ Export Backup (.json)</button>
-          <button class="btn btn-purplel btn-xs" onclick="exportCSV()">📊 Export CSV</button>
-          <button class="btn btn-purplel btn-xs" onclick="exportPDF()">📄 Export PDF</button>
-        </div>
+    <div class="sync-header" onclick="toggleSync()">
+      <div class="sync-header-left">
+        <span>🔄</span>
+        <span class="sync-header-title">Backup, Export &amp; Restore</span>
+        <span class="sync-header-badge">Click to expand</span>
       </div>
-      <div class="sync-box">
-        <div class="sync-box-title">📥 Import / Restore</div>
-        <div class="sync-box-desc">Import a .json backup from another device. Choose merge or replace.</div>
-        <div class="sync-box-btns">
-          <button class="btn btn-purple btn-xs" onclick="openImportModal()">⬆️ Import Backup (.json)</button>
+      <span class="sync-toggle" id="sync-toggle">⌄</span>
+    </div>
+    <div class="sync-body" id="sync-body">
+      <div class="sync-desc">Export a backup file and share it to sync between devices. Use Local Snapshots for quick in-browser saves.</div>
+      <div class="sync-grid">
+        <div class="sync-box">
+          <div class="sync-box-title">📤 Export / Share</div>
+          <div class="sync-box-desc">Download a .json backup and share it to sync another device.</div>
+          <div class="sync-box-btns">
+            <button class="btn btn-purple btn-xs" onclick="exportJSON()">⬇️ Export Backup (.json)</button>
+            <button class="btn btn-purplel btn-xs" onclick="exportCSV()">📊 Export CSV</button>
+            <button class="btn btn-purplel btn-xs" onclick="exportPDF()">📄 Export PDF</button>
+          </div>
         </div>
-      </div>
-      <div class="sync-box">
-        <div class="sync-box-title">💾 Local Snapshots</div>
-        <div class="sync-box-desc">Save named snapshots in this browser. Restore any snapshot instantly.</div>
-        <div class="sync-box-btns">
-          <button class="btn btn-purple btn-xs" onclick="saveSnapshot()">💾 Save Snapshot Now</button>
-          <button class="btn btn-purplel btn-xs" onclick="openSnapshotModal()">📋 Snapshots (<span id="snap-count">0</span>)</button>
+        <div class="sync-box">
+          <div class="sync-box-title">📥 Import / Restore</div>
+          <div class="sync-box-desc">Import a .json backup from another device. Choose merge or replace.</div>
+          <div class="sync-box-btns">
+            <button class="btn btn-purple btn-xs" onclick="openImportModal()">⬆️ Import Backup (.json)</button>
+          </div>
+        </div>
+        <div class="sync-box">
+          <div class="sync-box-title">💾 Local Snapshots</div>
+          <div class="sync-box-desc">Save named snapshots in this browser. Restore any snapshot instantly.</div>
+          <div class="sync-box-btns">
+            <button class="btn btn-purple btn-xs" onclick="saveSnapshot()">💾 Save Snapshot Now</button>
+            <button class="btn btn-purplel btn-xs" onclick="openSnapshotModal()">📋 Snapshots (<span id="snap-count">0</span>)</button>
+          </div>
         </div>
       </div>
     </div>
@@ -427,7 +422,7 @@ tr.row-new{animation:rowFlash .9s ease}
       <div class="fg" style="flex:1;min-width:220px">
         <label>Barcode / QR Code</label>
         <div class="bc-row">
-          <input type="text" id="barcode-input" placeholder="Scan, type, or tap 📷…"
+          <input type="text" id="barcode-input" placeholder="Scan or type barcode…"
                  autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
           <button class="cam-trigger" onclick="openCamera()" title="Camera scanner">📷</button>
         </div>
@@ -444,7 +439,7 @@ tr.row-new{animation:rowFlash .9s ease}
       </div>
     </div>
     <div class="scan-hint">
-      💡 <strong>USB scanner</strong> — auto-submits on <span class="kbd">Enter</span> &nbsp;|&nbsp;
+      💡 <strong>USB/Bluetooth scanner</strong> — plug in &amp; scan, auto-submits on <span class="kbd">Enter</span> &nbsp;|&nbsp;
       <strong>Mobile</strong> — tap 📷 for camera &nbsp;|&nbsp;
       <span class="kbd">Tab</span> → customer &nbsp;|&nbsp; <span class="kbd">Esc</span> clears
     </div>
@@ -478,8 +473,7 @@ tr.row-new{animation:rowFlash .9s ease}
         <tbody id="tbl-body"></tbody>
       </table>
       <div id="empty-state" class="empty">
-        <div class="ei">📭</div>
-        <p>No records yet. Scan a barcode above to get started.</p>
+        <div class="ei">📭</div><p>No records yet. Scan a barcode to get started.</p>
       </div>
     </div>
     <div class="tbl-foot">
@@ -487,28 +481,27 @@ tr.row-new{animation:rowFlash .9s ease}
       <span id="last-upd"></span>
     </div>
   </div>
-</div><!-- /wrap -->
-</div><!-- /main-app -->
+</div>
+</div>
 
 <!-- IMPORT MODAL -->
 <div class="modal-bg" id="import-modal">
   <div class="modal">
     <h3>⬆️ Import Backup</h3>
-    <p>Select your <strong>.json</strong> backup file or paste the JSON text.</p>
+    <p>Select a <strong>.json</strong> backup file or paste JSON text.</p>
     <div class="file-drop" onclick="document.getElementById('file-import-input').click()" id="file-drop-zone">
-      <div style="font-size:32px">📂</div>
-      <p>Tap to choose .json file</p>
-      <span>or drag and drop</span>
+      <div style="font-size:28px">📂</div>
+      <p>Tap to choose .json file</p><span>or drag and drop</span>
     </div>
     <input type="file" id="file-import-input" accept=".json,application/json">
     <div class="or-divider">or paste JSON text</div>
     <textarea class="import-ta" id="import-ta" placeholder="Paste exported JSON here…"></textarea>
-    <div style="margin:12px 0 4px;font-size:12px;font-weight:600;color:var(--muted)">IMPORT MODE</div>
-    <div style="display:flex;gap:8px;margin-bottom:16px">
-      <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer">
+    <div style="margin:10px 0 4px;font-size:11px;font-weight:600;color:var(--muted)">IMPORT MODE</div>
+    <div style="display:flex;gap:12px;margin-bottom:14px">
+      <label style="display:flex;align-items:center;gap:5px;font-size:12.5px;cursor:pointer">
         <input type="radio" name="imp-mode" value="merge" checked> Merge with existing
       </label>
-      <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer">
+      <label style="display:flex;align-items:center;gap:5px;font-size:12.5px;cursor:pointer">
         <input type="radio" name="imp-mode" value="replace"> Replace all data
       </label>
     </div>
@@ -521,9 +514,9 @@ tr.row-new{animation:rowFlash .9s ease}
 
 <!-- SNAPSHOT MODAL -->
 <div class="modal-bg" id="snap-modal">
-  <div class="modal" style="max-width:480px">
+  <div class="modal" style="max-width:460px">
     <h3>💾 Local Snapshots</h3>
-    <p>Snapshots are saved in <strong>this browser only</strong>.</p>
+    <p>Snapshots saved in <strong>this browser only</strong>. Restore any snapshot instantly.</p>
     <div class="backup-list" id="snap-list"></div>
     <div class="modal-btns">
       <button class="btn btn-outline btn-sm" onclick="closeSnapshotModal()">Close</button>
@@ -535,12 +528,12 @@ tr.row-new{animation:rowFlash .9s ease}
 <!-- CLEAR MODAL -->
 <div class="modal-bg" id="clear-modal">
   <div class="modal">
-    <h3>⚠️ Clear All Data?</h3>
-    <p>This will permanently delete every record. Export a backup first if needed.</p>
+    <h3>⚠️ Clear All Records?</h3>
+    <p>This will delete every record from Firestore cloud. This cannot be undone.</p>
     <div class="modal-btns">
       <button class="btn btn-outline btn-sm" onclick="closeClearModal()">Cancel</button>
-      <button class="btn btn-purple btn-sm" onclick="exportJSON();toast('Backup downloaded.','purple')">💾 Backup First</button>
-      <button class="btn btn-danger btn-sm" onclick="clearAll()">🗑 Clear Anyway</button>
+      <button class="btn btn-purple  btn-sm" onclick="exportJSON()">💾 Backup First</button>
+      <button class="btn btn-danger  btn-sm" onclick="clearAll()">🗑 Clear Anyway</button>
     </div>
   </div>
 </div>
@@ -564,8 +557,8 @@ tr.row-new{animation:rowFlash .9s ease}
     </div>
     <div class="cam-result" id="cam-result"></div>
     <div class="cam-bottombar">
-      <div class="cam-status" id="cam-status">Initializing camera…</div>
-      <div class="cam-hint" id="cam-hint">Point camera at any barcode or QR code</div>
+      <div class="cam-status" id="cam-status">Initializing…</div>
+      <div class="cam-hint" id="cam-hint">Point at any barcode or QR code</div>
     </div>
   </div>
 </div>
@@ -573,134 +566,178 @@ tr.row-new{animation:rowFlash .9s ease}
 <div id="toast-box"></div>
 
 <script>
-// ═══════════════════════════════════════════════════
-//  ✅ FIX 6: AUTH FUNCTIONS — proper error messages,
-//  no alert(), uses Firebase v8 syntax correctly
-// ═══════════════════════════════════════════════════
+'use strict';
 
+// ═══════════════════════════════════════════════════
+//  AUTH
+// ═══════════════════════════════════════════════════
 function showAuthMsg(msg, type) {
   const el = document.getElementById('auth-msg');
-  el.textContent = msg;
-  el.className = 'auth-msg ' + type;
+  el.textContent = msg; el.className = 'auth-msg ' + type;
 }
-
 function signup() {
   const email = document.getElementById('auth-email').value.trim();
   const pass  = document.getElementById('auth-password').value;
-
-  if (!email || !pass) { showAuthMsg('Please enter email and password.', 'err'); return; }
-  if (pass.length < 6) { showAuthMsg('Password must be at least 6 characters.', 'err'); return; }
-
-  showAuthMsg('Creating account…', 'ok');
-
-  // ✅ Correct v8 Firebase Auth call
+  if (!email || !pass) { showAuthMsg('Please enter email and password.','err'); return; }
+  if (pass.length < 6) { showAuthMsg('Password must be at least 6 characters.','err'); return; }
+  showAuthMsg('Creating account…','ok');
   auth.createUserWithEmailAndPassword(email, pass)
-    .then(cred => {
-      showAuthMsg('Account created! Logging you in…', 'ok');
-      // onAuthStateChanged will handle showing the app
-    })
     .catch(err => {
-      // ✅ FIX 7: Map Firebase error codes to friendly messages
-      const msgs = {
-        'auth/email-already-in-use': 'This email is already registered. Please login instead.',
-        'auth/invalid-email':        'Please enter a valid email address.',
-        'auth/weak-password':        'Password must be at least 6 characters.',
-        'auth/network-request-failed': 'Network error. Check your internet connection.'
-      };
-      showAuthMsg(msgs[err.code] || err.message, 'err');
+      const m = {'auth/email-already-in-use':'Email already registered. Please login.',
+        'auth/invalid-email':'Invalid email address.',
+        'auth/weak-password':'Password must be at least 6 characters.',
+        'auth/network-request-failed':'Network error. Check your connection.'};
+      showAuthMsg(m[err.code] || err.message,'err');
     });
 }
-
 function login() {
   const email = document.getElementById('auth-email').value.trim();
   const pass  = document.getElementById('auth-password').value;
-
-  if (!email || !pass) { showAuthMsg('Please enter email and password.', 'err'); return; }
-
-  showAuthMsg('Signing in…', 'ok');
-
-  // ✅ Correct v8 Firebase Auth call
+  if (!email || !pass) { showAuthMsg('Please enter email and password.','err'); return; }
+  showAuthMsg('Signing in…','ok');
   auth.signInWithEmailAndPassword(email, pass)
-    .then(() => {
-      // onAuthStateChanged handles the rest
-    })
     .catch(err => {
-      const msgs = {
-        'auth/user-not-found':     'No account found with this email. Please sign up first.',
-        'auth/wrong-password':     'Incorrect password. Please try again.',
-        'auth/invalid-email':      'Please enter a valid email address.',
-        'auth/too-many-requests':  'Too many failed attempts. Please wait and try again.',
-        'auth/network-request-failed': 'Network error. Check your internet connection.',
-        'auth/invalid-credential': 'Invalid email or password. Please check and try again.'
-      };
-      showAuthMsg(msgs[err.code] || err.message, 'err');
+      const m = {'auth/user-not-found':'No account found. Please sign up first.',
+        'auth/wrong-password':'Incorrect password.',
+        'auth/invalid-credential':'Invalid email or password.',
+        'auth/too-many-requests':'Too many attempts. Please wait.',
+        'auth/network-request-failed':'Network error. Check your connection.'};
+      showAuthMsg(m[err.code] || err.message,'err');
     });
 }
+function logout() { auth.signOut(); }
 
-function logout() {
-  auth.signOut().catch(err => console.error('Logout error:', err));
-}
+// ═══════════════════════════════════════════════════
+//  AUTH STATE — single source of truth
+// ═══════════════════════════════════════════════════
+let currentUser = null;
+let unsubscribeFirestore = null;
+let appReady = false;
 
-// ✅ FIX 8: onAuthStateChanged is the SINGLE source of truth
-// for showing/hiding the auth screen vs the main app
-auth.onAuthStateChanged(function(user) {
+auth.onAuthStateChanged(user => {
   if (user) {
-    // ── LOGGED IN ──
+    currentUser = user;
     document.getElementById('auth-screen').style.display = 'none';
     document.getElementById('main-app').style.display    = 'block';
-    // Show user email in header
     document.getElementById('hd-user').textContent = user.email;
-    // ✅ FIX 9: App init runs AFTER login confirmed, not before
-    initApp();
+    if (!appReady) initApp();
+    loadFromFirestore();
   } else {
-    // ── LOGGED OUT ──
+    currentUser = null;
+    if (unsubscribeFirestore) { unsubscribeFirestore(); unsubscribeFirestore = null; }
     document.getElementById('auth-screen').style.display = 'flex';
     document.getElementById('main-app').style.display    = 'none';
-    // Clear sensitive data from memory on logout
+    appReady = false;
     records = []; customers = []; snapshots = [];
   }
 });
 
 // ═══════════════════════════════════════════════════
-//  STORAGE KEYS  (per-user isolation ready)
+//  STATE
 // ═══════════════════════════════════════════════════
-const KEYS = {
-  records:   'toner_records',
-  customers: 'toner_customers',
-  snapshots: 'toner_snapshots'
-};
-
 let records   = [];
 let customers = [];
-let snapshots = [];
-let mode = 'OUT', lastId = null, lsbTimer, appReady = false;
+let snapshots = JSON.parse(localStorage.getItem('toner_snapshots') || '[]');
+let mode = 'OUT', lastId = null, lsbTimer;
 
-function save() {
-  localStorage.setItem(KEYS.records,   JSON.stringify(records));
-  localStorage.setItem(KEYS.customers, JSON.stringify(customers));
+// ═══════════════════════════════════════════════════
+//  FIRESTORE — save & load
+// ═══════════════════════════════════════════════════
+function userCol() {
+  // Each user's data stored under their own UID — completely isolated
+  return db.collection('users').doc(currentUser.uid).collection('records');
 }
-function saveSnaps() {
-  localStorage.setItem(KEYS.snapshots, JSON.stringify(snapshots));
+
+function setSyncStatus(status) {
+  const el = document.getElementById('sync-pill');
+  if (status === 'ok')   { el.className='sync-pill sp-ok';   el.textContent='✅ Synced'; }
+  if (status === 'busy') { el.className='sync-pill sp-busy'; el.textContent='⏳ Saving…'; }
+  if (status === 'err')  { el.className='sync-pill sp-err';  el.textContent='❌ Sync Error'; }
+}
+
+// Real-time listener — any change in Firestore updates the screen instantly
+function loadFromFirestore() {
+  setSyncStatus('busy');
+  if (unsubscribeFirestore) unsubscribeFirestore();
+
+  unsubscribeFirestore = userCol()
+    .orderBy('issueDate', 'asc')
+    .onSnapshot(snapshot => {
+      records = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+      // Rebuild customer list from records
+      customers = [...new Set(records.map(r => r.customer).filter(Boolean))];
+      updateCustList();
+      renderTable();
+      setSyncStatus('ok');
+    }, err => {
+      console.error('Firestore error:', err);
+      setSyncStatus('err');
+      toast('Cloud sync error — check connection.','err');
+    });
+}
+
+async function saveToFirestore(rec) {
+  setSyncStatus('busy');
+  try {
+    await userCol().doc(rec.id).set(rec);
+    setSyncStatus('ok');
+  } catch(err) {
+    setSyncStatus('err');
+    toast('Failed to save to cloud.','err');
+    throw err;
+  }
+}
+
+async function updateInFirestore(id, data) {
+  setSyncStatus('busy');
+  try {
+    await userCol().doc(id).update(data);
+    setSyncStatus('ok');
+  } catch(err) {
+    setSyncStatus('err');
+    toast('Failed to update cloud record.','err');
+    throw err;
+  }
+}
+
+async function deleteAllFromFirestore() {
+  setSyncStatus('busy');
+  try {
+    const snap = await userCol().get();
+    const batch = db.batch();
+    snap.docs.forEach(d => batch.delete(d.ref));
+    await batch.commit();
+    setSyncStatus('ok');
+  } catch(err) {
+    setSyncStatus('err');
+    toast('Failed to clear cloud data.','err');
+    throw err;
+  }
 }
 
 // ═══════════════════════════════════════════════════
-//  APP INIT — called only after successful login
+//  COLLAPSIBLE SYNC PANEL
+// ═══════════════════════════════════════════════════
+let syncOpen = false;
+function toggleSync() {
+  syncOpen = !syncOpen;
+  document.getElementById('sync-body').classList.toggle('open', syncOpen);
+  document.getElementById('sync-toggle').classList.toggle('open', syncOpen);
+  const badge = document.querySelector('.sync-header-badge');
+  badge.textContent = syncOpen ? 'Click to collapse' : 'Click to expand';
+}
+
+// ═══════════════════════════════════════════════════
+//  APP INIT
 // ═══════════════════════════════════════════════════
 function initApp() {
-  if (appReady) return; // don't double-init on re-render
   appReady = true;
-
-  records   = JSON.parse(localStorage.getItem(KEYS.records)   || '[]');
-  customers = JSON.parse(localStorage.getItem(KEYS.customers) || '[]');
-  snapshots = JSON.parse(localStorage.getItem(KEYS.snapshots) || '[]');
-
-  const hd  = document.getElementById('hd-date');
+  const hd = document.getElementById('hd-date');
   const fmt = () => new Date().toLocaleDateString('en-GB',
     {weekday:'short',day:'numeric',month:'short',year:'numeric'});
   hd.textContent = fmt();
   setInterval(() => hd.textContent = fmt(), 60000);
 
-  // ✅ FIX 10: Keyboard listeners attached only after app is shown
   bc().addEventListener('keydown', e => {
     if (e.key==='Escape') { bc().value=''; flashInput('clear'); return; }
     if (e.key==='Enter') {
@@ -725,11 +762,10 @@ function initApp() {
     if (!['INPUT','SELECT','BUTTON','TEXTAREA','A','VIDEO','LABEL'].includes(e.target.tagName))
       returnFocus();
   });
-
   setMode('OUT');
   updateCustList();
   renderTable();
-  setTimeout(() => returnFocus(), 300);
+  setTimeout(() => returnFocus(), 400);
 }
 
 // ═══════════════════════════════════════════════════
@@ -796,7 +832,7 @@ function handleScan() {
   } else doIn(barcode);
 }
 
-function doOut(barcode, cust) {
+async function doOut(barcode, cust) {
   const dup = records.find(r => r.barcode===barcode && r.status==='OUT');
   if (dup) {
     feedback(`⚠️  "${barcode}" is already OUT to ${dup.customer}. Return it first.`,'warn');
@@ -805,34 +841,38 @@ function doOut(barcode, cust) {
   }
   const rec = { id:uid(), barcode, customer:cust,
     issueDate:new Date().toISOString(), returnDate:null, status:'OUT' };
-  records.push(rec); lastId = rec.id;
-  if (!customers.includes(cust)) { customers.push(cust); updateCustList(); }
-  save(); renderTable();
-  feedback(`✅  OUT — "${barcode}" issued to ${cust}`,'ok');
-  toast(`✅ "${barcode}" → ${cust}`,'ok');
-  flashInput('ok'); bc().value=''; cu().value=''; returnFocus();
+  lastId = rec.id;
+  try {
+    await saveToFirestore(rec);
+    // Firestore listener will update records[] and renderTable() automatically
+    feedback(`✅  OUT — "${barcode}" issued to ${cust}`,'ok');
+    toast(`✅ "${barcode}" → ${cust}`,'ok');
+    flashInput('ok');
+    bc().value=''; cu().value=''; returnFocus();
+  } catch {}
 }
 
-function doIn(barcode) {
-  const idx = records.findIndex(r => r.barcode===barcode && r.status==='OUT');
-  if (idx===-1) {
+async function doIn(barcode) {
+  const rec = records.find(r => r.barcode===barcode && r.status==='OUT');
+  if (!rec) {
     const done = records.find(r => r.barcode===barcode && r.status==='RETURNED');
     if (done) {
-      feedback(`ℹ️  "${barcode}" was already returned on ${fmtDt(done.returnDate)}.`,'warn');
+      feedback(`ℹ️  "${barcode}" already returned on ${fmtDt(done.returnDate)}.`,'warn');
       toast('Item already returned.','warn');
     } else {
-      feedback(`❌  "${barcode}" was not issued or not found in system.`,'err');
-      toast('Barcode not found in OUT records.','err');
+      feedback(`❌  "${barcode}" not found in OUT records.`,'err');
+      toast('Barcode not found.','err');
     }
     flashInput('err'); bc().value=''; returnFocus(); return;
   }
-  records[idx].returnDate = new Date().toISOString();
-  records[idx].status     = 'RETURNED';
-  lastId = records[idx].id;
-  save(); renderTable();
-  feedback(`✅  RETURNED — "${barcode}" from ${records[idx].customer}`,'ok');
-  toast(`📥 "${barcode}" marked returned`,'ok');
-  flashInput('ok'); bc().value=''; returnFocus();
+  lastId = rec.id;
+  const patch = { returnDate:new Date().toISOString(), status:'RETURNED' };
+  try {
+    await updateInFirestore(rec.id, patch);
+    feedback(`✅  RETURNED — "${barcode}" from ${rec.customer}`,'ok');
+    toast(`📥 "${barcode}" returned`,'ok');
+    flashInput('ok'); bc().value=''; returnFocus();
+  } catch {}
 }
 
 // ═══════════════════════════════════════════════════
@@ -870,7 +910,6 @@ function renderTable() {
   if (records.length) document.getElementById('last-upd').textContent = 'Updated: '+fmtDt(new Date().toISOString());
   document.getElementById('snap-count').textContent = snapshots.length;
 }
-
 function updateCustList() {
   document.getElementById('cust-list').innerHTML = customers.map(c=>`<option value="${esc(c)}">`).join('');
 }
@@ -880,7 +919,7 @@ function updateCustList() {
 // ═══════════════════════════════════════════════════
 function exportJSON() {
   if (!records.length) { toast('No data to export.','warn'); return; }
-  const payload = { exportedAt:new Date().toISOString(), appVersion:'v4', records, customers };
+  const payload = { exportedAt:new Date().toISOString(), appVersion:'v5-firestore', records, customers };
   dl(new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}), `toner_backup_${today()}.json`);
   toast('✅ Backup downloaded.','purple');
 }
@@ -889,64 +928,64 @@ function exportJSON() {
 //  IMPORT JSON
 // ═══════════════════════════════════════════════════
 function openImportModal() {
-  document.getElementById('import-ta').value = '';
-  document.getElementById('file-import-input').value = '';
+  document.getElementById('import-ta').value='';
+  document.getElementById('file-import-input').value='';
   document.getElementById('import-modal').classList.add('open');
 }
 function closeImportModal() { document.getElementById('import-modal').classList.remove('open'); returnFocus(); }
-
 document.getElementById('file-import-input').addEventListener('change', function() {
-  const f = this.files[0]; if (!f) return;
-  const r = new FileReader();
-  r.onload = e => document.getElementById('import-ta').value = e.target.result;
-  r.readAsText(f);
+  const f=this.files[0]; if(!f) return;
+  const r=new FileReader(); r.onload=e=>document.getElementById('import-ta').value=e.target.result; r.readAsText(f);
 });
-const dz = document.getElementById('file-drop-zone');
-dz.addEventListener('dragover', e => { e.preventDefault(); dz.style.background='#ddd6fe'; });
-dz.addEventListener('dragleave', () => dz.style.background='');
-dz.addEventListener('drop', e => {
-  e.preventDefault(); dz.style.background='';
-  const f = e.dataTransfer.files[0]; if (!f) return;
-  const r = new FileReader();
-  r.onload = ev => document.getElementById('import-ta').value = ev.target.result;
-  r.readAsText(f);
+const dz=document.getElementById('file-drop-zone');
+dz.addEventListener('dragover',e=>{e.preventDefault();dz.style.background='#ddd6fe';});
+dz.addEventListener('dragleave',()=>dz.style.background='');
+dz.addEventListener('drop',e=>{
+  e.preventDefault();dz.style.background='';
+  const f=e.dataTransfer.files[0]; if(!f) return;
+  const r=new FileReader(); r.onload=ev=>document.getElementById('import-ta').value=ev.target.result; r.readAsText(f);
 });
-
-function doImport() {
+async function doImport() {
   const raw = document.getElementById('import-ta').value.trim();
   if (!raw) { toast('Nothing to import.','warn'); return; }
   let payload;
-  try { payload = JSON.parse(raw); } catch { toast('❌ Invalid JSON file.','err'); return; }
+  try { payload = JSON.parse(raw); } catch { toast('❌ Invalid JSON.','err'); return; }
   const imp  = Array.isArray(payload) ? payload : (payload.records   || []);
-  const impC = Array.isArray(payload) ? []      : (payload.customers || []);
   if (!imp.length) { toast('No records found.','warn'); return; }
   const m = document.querySelector('input[name="imp-mode"]:checked').value;
-  if (m==='replace') {
-    records=imp; customers=impC;
-    toast(`✅ Replaced with ${imp.length} records.`,'purple');
-  } else {
-    const ids = new Set(records.map(r=>r.id)); let added=0;
-    imp.forEach(r => { if (!ids.has(r.id)) { records.push(r); added++; } });
-    impC.forEach(c => { if (!customers.includes(c)) customers.push(c); });
-    imp.forEach(r => { if (r.customer && !customers.includes(r.customer)) customers.push(r.customer); });
-    toast(`✅ Merged: ${added} new record${added!==1?'s':''} added.`,'purple');
-  }
-  save(); updateCustList(); renderTable(); closeImportModal();
+  setSyncStatus('busy');
+  try {
+    if (m==='replace') {
+      await deleteAllFromFirestore();
+    }
+    const existing = new Set(records.map(r=>r.id));
+    const batch = db.batch();
+    let added = 0;
+    imp.forEach(r => {
+      if (m==='replace' || !existing.has(r.id)) {
+        batch.set(userCol().doc(r.id), r);
+        added++;
+      }
+    });
+    await batch.commit();
+    setSyncStatus('ok');
+    closeImportModal();
+    toast(`✅ Imported ${added} records to cloud.`,'purple');
+  } catch { toast('Import failed.','err'); }
 }
 
 // ═══════════════════════════════════════════════════
-//  SNAPSHOTS
+//  SNAPSHOTS (local browser only)
 // ═══════════════════════════════════════════════════
 function saveSnapshot() {
   if (!records.length) { toast('No data to snapshot.','warn'); return; }
   const name = `Snapshot — ${new Date().toLocaleDateString('en-GB',
-    {day:'2-digit',month:'short',year:'numeric'})} ${new Date().toLocaleTimeString('en-GB',
-    {hour:'2-digit',minute:'2-digit'})}`;
+    {day:'2-digit',month:'short',year:'numeric'})} ${new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})}`;
   snapshots.unshift({ id:uid(), name, savedAt:new Date().toISOString(),
-    records:JSON.parse(JSON.stringify(records)),
-    customers:JSON.parse(JSON.stringify(customers)) });
-  if (snapshots.length>20) snapshots = snapshots.slice(0,20);
-  saveSnaps(); renderTable();
+    records:JSON.parse(JSON.stringify(records)), customers:JSON.parse(JSON.stringify(customers)) });
+  if (snapshots.length>20) snapshots=snapshots.slice(0,20);
+  localStorage.setItem('toner_snapshots', JSON.stringify(snapshots));
+  renderTable();
   toast(`💾 Snapshot saved (${records.length} records).`,'purple');
 }
 function openSnapshotModal()  { renderSnapList(); document.getElementById('snap-modal').classList.add('open'); }
@@ -966,15 +1005,23 @@ function renderSnapList() {
       </div>
     </div>`).join('');
 }
-function restoreSnapshot(i) {
-  if (!confirm(`Restore "${snapshots[i].name}"?\nThis replaces current data.`)) return;
-  records=JSON.parse(JSON.stringify(snapshots[i].records));
-  customers=JSON.parse(JSON.stringify(snapshots[i].customers));
-  save(); updateCustList(); renderTable(); closeSnapshotModal();
-  toast(`✅ Restored: ${records.length} records.`,'purple');
+async function restoreSnapshot(i) {
+  if (!confirm(`Restore "${snapshots[i].name}"?\nThis replaces ALL cloud data.`)) return;
+  setSyncStatus('busy');
+  try {
+    await deleteAllFromFirestore();
+    const batch = db.batch();
+    snapshots[i].records.forEach(r => batch.set(userCol().doc(r.id), r));
+    await batch.commit();
+    setSyncStatus('ok');
+    closeSnapshotModal();
+    toast(`✅ Restored ${snapshots[i].records.length} records to cloud.`,'purple');
+  } catch { toast('Restore failed.','err'); }
 }
 function deleteSnapshot(i) {
-  snapshots.splice(i,1); saveSnaps(); renderSnapList(); renderTable();
+  snapshots.splice(i,1);
+  localStorage.setItem('toner_snapshots', JSON.stringify(snapshots));
+  renderSnapList(); renderTable();
   toast('Snapshot deleted.','warn');
 }
 
@@ -983,30 +1030,28 @@ function deleteSnapshot(i) {
 // ═══════════════════════════════════════════════════
 function exportCSV() {
   if (!records.length) { toast('No data.','warn'); return; }
-  const hdr = ['Barcode','Customer Name','Issue Date','Return Date','Status'];
-  const rows = records.map(r => [r.barcode, r.customer||'',
-    r.issueDate  ? new Date(r.issueDate).toLocaleString('en-GB')  : '',
-    r.returnDate ? new Date(r.returnDate).toLocaleString('en-GB') : '', r.status]);
-  const csv = [hdr,...rows].map(row=>row.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
-  dl(new Blob([csv],{type:'text/csv'}), `toner_${today()}.csv`);
+  const hdr=['Barcode','Customer Name','Issue Date','Return Date','Status'];
+  const rows=records.map(r=>[r.barcode,r.customer||'',
+    r.issueDate  ?new Date(r.issueDate).toLocaleString('en-GB') :'',
+    r.returnDate ?new Date(r.returnDate).toLocaleString('en-GB'):'',r.status]);
+  const csv=[hdr,...rows].map(row=>row.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+  dl(new Blob([csv],{type:'text/csv'}),`toner_${today()}.csv`);
   toast('CSV downloaded.','ok');
 }
-
 function exportPDF() {
   if (!records.length) { toast('No data.','warn'); return; }
-  const {jsPDF} = window.jspdf;
-  const doc = new jsPDF({orientation:'landscape'});
-  doc.setFillColor(37,99,235); doc.rect(0,0,297,26,'F');
+  const {jsPDF}=window.jspdf;
+  const doc=new jsPDF({orientation:'landscape'});
+  doc.setFillColor(37,99,235);doc.rect(0,0,297,26,'F');
   doc.setTextColor(255,255,255);
-  doc.setFontSize(15); doc.setFont('helvetica','bold');
+  doc.setFontSize(15);doc.setFont('helvetica','bold');
   doc.text('Toner Inventory Tracker',14,11);
-  doc.setFontSize(8.5); doc.setFont('helvetica','normal');
+  doc.setFontSize(8.5);doc.setFont('helvetica','normal');
   doc.text('Warehouse Management System',14,19);
-  const ds = new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'});
+  const ds=new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'});
   doc.text(`Report Date: ${ds}`,190,11);
   const ret=records.filter(r=>r.status==='RETURNED').length;
-  const pend=records.filter(r=>r.status==='OUT').length;
-  doc.text(`Total: ${records.length}   Returned: ${ret}   Pending: ${pend}`,190,19);
+  doc.text(`Total: ${records.length}   Returned: ${ret}   Pending: ${records.length-ret}`,190,19);
   doc.autoTable({
     head:[['#','Barcode','Customer','Issue Date','Return Date','Status']],
     body:records.slice().reverse().map((r,i)=>[i+1,r.barcode,r.customer||'—',
@@ -1025,7 +1070,7 @@ function exportPDF() {
   });
   const pages=doc.internal.getNumberOfPages();
   for(let i=1;i<=pages;i++){
-    doc.setPage(i); doc.setFontSize(8); doc.setTextColor(160);
+    doc.setPage(i);doc.setFontSize(8);doc.setTextColor(160);
     doc.text(`Page ${i} of ${pages}`,265,200);
     doc.text('Toner Inventory Tracker — Confidential',14,200);
   }
@@ -1038,141 +1083,139 @@ function exportPDF() {
 // ═══════════════════════════════════════════════════
 function openClearModal()  { document.getElementById('clear-modal').classList.add('open'); }
 function closeClearModal() { document.getElementById('clear-modal').classList.remove('open'); returnFocus(); }
-function clearAll() {
-  records=[]; customers=[]; lastId=null;
-  save(); updateCustList(); renderTable();
-  toast('All records cleared.','warn'); closeClearModal();
+async function clearAll() {
+  try {
+    await deleteAllFromFirestore();
+    lastId = null;
+    toast('All records cleared from cloud.','warn');
+    closeClearModal();
+  } catch {}
 }
-document.getElementById('clear-modal').addEventListener('click', e => {
-  if (e.target===e.currentTarget) closeClearModal();
+document.getElementById('clear-modal').addEventListener('click',e=>{
+  if(e.target===e.currentTarget) closeClearModal();
 });
 
 // ═══════════════════════════════════════════════════
 //  CAMERA
 // ═══════════════════════════════════════════════════
-let camStream=null, camLoop=null, nativeDetector=null;
-let lastScanCode='', lastScanTime=0;
+let camStream=null,camLoop=null,nativeDetector=null;
+let lastScanCode='',lastScanTime=0;
 const SCAN_DEBOUNCE=2000;
-
-async function openCamera() {
-  const badge = document.getElementById('cam-mode-badge');
+async function openCamera(){
+  const badge=document.getElementById('cam-mode-badge');
   badge.textContent=mode;
   badge.className='cam-topbar-mode '+(mode==='OUT'?'cam-mode-out':'cam-mode-in');
   document.getElementById('cam-modal').classList.add('open');
   setStatus('⏳ Starting camera…','');
-  if (!navigator.mediaDevices?.getUserMedia) { setStatus('❌ Camera not supported.','Use Chrome on Android.'); return; }
-  try {
-    camStream = await navigator.mediaDevices.getUserMedia({
+  if(!navigator.mediaDevices?.getUserMedia){setStatus('❌ Camera not supported.','Use Chrome on Android.');return;}
+  try{
+    camStream=await navigator.mediaDevices.getUserMedia({
       video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:720}},audio:false});
-    const v = document.getElementById('cam-video');
-    v.srcObject = camStream; await v.play();
-    if ('BarcodeDetector' in window) {
-      try { nativeDetector=new BarcodeDetector({formats:['qr_code','code_128','code_39','code_93','ean_13','ean_8','upc_a','upc_e','itf','codabar','aztec','data_matrix','pdf417']}); }
-      catch { nativeDetector=new BarcodeDetector(); }
+    const v=document.getElementById('cam-video');
+    v.srcObject=camStream;await v.play();
+    if('BarcodeDetector' in window){
+      try{nativeDetector=new BarcodeDetector({formats:['qr_code','code_128','code_39','code_93','ean_13','ean_8','upc_a','upc_e','itf','codabar','aztec','data_matrix','pdf417']});}
+      catch{nativeDetector=new BarcodeDetector();}
       setStatus('🟢 Camera ready — scanning…','Supports all barcode & QR formats');
-    } else {
+    }else{
       setStatus('⏳ Loading scanner…','');
-      if (!window.jsQR) await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jsQR/1.4.0/jsQR.min.js');
+      if(!window.jsQR) await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jsQR/1.4.0/jsQR.min.js');
       setStatus('🟡 Ready (QR codes only)','For all formats use Chrome on Android');
     }
     startScanLoop();
-  } catch(err) {
-    if (err.name==='NotAllowedError') setStatus('❌ Camera permission denied.','Allow camera and try again.');
-    else if (err.name==='NotFoundError') setStatus('❌ No camera found.','');
+  }catch(err){
+    if(err.name==='NotAllowedError') setStatus('❌ Camera permission denied.','Allow camera and try again.');
+    else if(err.name==='NotFoundError') setStatus('❌ No camera found.','');
     else setStatus(`❌ ${err.message}`,'');
   }
 }
-function startScanLoop() {
+function startScanLoop(){
   const v=document.getElementById('cam-video');
   const c=document.getElementById('cam-canvas');
   const ctx=c.getContext('2d',{willReadFrequently:true});
-  async function tick() {
-    if (!camStream) return;
-    if (v.readyState>=v.HAVE_ENOUGH_DATA&&v.videoWidth>0) {
-      c.width=v.videoWidth; c.height=v.videoHeight; ctx.drawImage(v,0,0);
-      try {
+  async function tick(){
+    if(!camStream) return;
+    if(v.readyState>=v.HAVE_ENOUGH_DATA&&v.videoWidth>0){
+      c.width=v.videoWidth;c.height=v.videoHeight;ctx.drawImage(v,0,0);
+      try{
         let code=null;
-        if (nativeDetector) {
-          const res=await nativeDetector.detect(c);
-          if (res.length>0) code=res[0].rawValue;
-        } else if (window.jsQR) {
-          const img=ctx.getImageData(0,0,c.width,c.height);
-          const r=jsQR(img.data,img.width,img.height,{inversionAttempts:'dontInvert'});
-          if (r) code=r.data;
-        }
-        if (code) {
-          const now=Date.now();
-          if (code!==lastScanCode||now-lastScanTime>SCAN_DEBOUNCE) {
-            lastScanCode=code; lastScanTime=now; onCameraScan(code);
-          }
-        }
-      } catch {}
+        if(nativeDetector){const res=await nativeDetector.detect(c);if(res.length>0)code=res[0].rawValue;}
+        else if(window.jsQR){const img=ctx.getImageData(0,0,c.width,c.height);const r=jsQR(img.data,img.width,img.height,{inversionAttempts:'dontInvert'});if(r)code=r.data;}
+        if(code){const now=Date.now();if(code!==lastScanCode||now-lastScanTime>SCAN_DEBOUNCE){lastScanCode=code;lastScanTime=now;onCameraScan(code);}}
+      }catch{}
     }
     camLoop=requestAnimationFrame(tick);
   }
   camLoop=requestAnimationFrame(tick);
 }
-function onCameraScan(code) {
-  if (navigator.vibrate) navigator.vibrate([60]);
+function onCameraScan(code){
+  if(navigator.vibrate) navigator.vibrate([60]);
   const res=document.getElementById('cam-result');
-  res.textContent='✅  '+code; res.classList.add('show');
+  res.textContent='✅  '+code;res.classList.add('show');
   setTimeout(()=>res.classList.remove('show'),1500);
   setStatus(`✅ Scanned: ${code}`,'');
   bc().value=code;
-  if (mode==='IN') { setTimeout(()=>{closeCamera();doIn(code);},500); }
-  else { setTimeout(()=>{closeCamera();if(cu().value.trim())handleScan();else{cu().focus();cu().select();toast('Barcode scanned ✅ — enter customer name','ok');}},500); }
+  if(mode==='IN'){setTimeout(()=>{closeCamera();doIn(code);},500);}
+  else{setTimeout(()=>{closeCamera();if(cu().value.trim())handleScan();else{cu().focus();cu().select();toast('Barcode scanned ✅ — enter customer name','ok');}},500);}
 }
-function closeCamera() {
-  if (camLoop) { cancelAnimationFrame(camLoop); camLoop=null; }
-  if (camStream) { camStream.getTracks().forEach(t=>t.stop()); camStream=null; }
-  nativeDetector=null; lastScanCode='';
+function closeCamera(){
+  if(camLoop){cancelAnimationFrame(camLoop);camLoop=null;}
+  if(camStream){camStream.getTracks().forEach(t=>t.stop());camStream=null;}
+  nativeDetector=null;lastScanCode='';
   document.getElementById('cam-modal').classList.remove('open');
   returnFocus(150);
 }
-function setStatus(msg,hint) {
+function setStatus(msg,hint){
   document.getElementById('cam-status').textContent=msg;
   document.getElementById('cam-hint').textContent=hint;
 }
 document.getElementById('cam-modal').addEventListener('click',e=>{
-  if (e.target===document.getElementById('cam-modal')) closeCamera();
+  if(e.target===document.getElementById('cam-modal')) closeCamera();
 });
 
 // ═══════════════════════════════════════════════════
 //  SAMPLE DATA
 // ═══════════════════════════════════════════════════
-function loadSample() {
-  if (records.length) { toast('Clear existing data first.','warn'); return; }
-  const DAY=86400000, now=Date.now();
-  [{bc:'TNR-2024-001',cu:'Al Futtaim Group',   st:'OUT',      i:5},
-   {bc:'TNR-2024-002',cu:'Emaar Properties',   st:'RETURNED', i:9,r:3},
-   {bc:'TNR-2024-003',cu:'Dubai Municipality', st:'OUT',      i:2},
-   {bc:'TNR-2024-004',cu:'DEWA',               st:'RETURNED', i:11,r:1},
-   {bc:'TNR-2024-005',cu:'Al Futtaim Group',   st:'OUT',      i:1},
-   {bc:'TNR-2024-006',cu:'RTA Dubai',          st:'RETURNED', i:7,r:2}]
-  .forEach(x => {
-    records.push({id:uid(),barcode:x.bc,customer:x.cu,
-      issueDate:new Date(now-x.i*DAY).toISOString(),
-      returnDate:x.r?new Date(now-x.r*DAY).toISOString():null,status:x.st});
-    if (!customers.includes(x.cu)) customers.push(x.cu);
-  });
-  save(); updateCustList(); renderTable();
-  toast('Sample data loaded.','ok');
+async function loadSample(){
+  if(records.length){toast('Clear existing data first.','warn');return;}
+  const DAY=86400000,now=Date.now();
+  const samples=[
+    {bc:'TNR-2024-001',cu:'Al Futtaim Group',   st:'OUT',      i:5},
+    {bc:'TNR-2024-002',cu:'Emaar Properties',   st:'RETURNED', i:9,r:3},
+    {bc:'TNR-2024-003',cu:'Dubai Municipality', st:'OUT',      i:2},
+    {bc:'TNR-2024-004',cu:'DEWA',               st:'RETURNED', i:11,r:1},
+    {bc:'TNR-2024-005',cu:'Al Futtaim Group',   st:'OUT',      i:1},
+    {bc:'TNR-2024-006',cu:'RTA Dubai',          st:'RETURNED', i:7,r:2}
+  ];
+  setSyncStatus('busy');
+  try{
+    const batch=db.batch();
+    samples.forEach(s=>{
+      const rec={id:uid(),barcode:s.bc,customer:s.cu,
+        issueDate:new Date(now-s.i*DAY).toISOString(),
+        returnDate:s.r?new Date(now-s.r*DAY).toISOString():null,status:s.st};
+      batch.set(userCol().doc(rec.id),rec);
+    });
+    await batch.commit();
+    setSyncStatus('ok');
+    toast('Sample data loaded to cloud.','ok');
+  }catch{toast('Failed to load sample data.','err');}
 }
 
 // ═══════════════════════════════════════════════════
 //  UTILITIES
 // ═══════════════════════════════════════════════════
-function uid()  { return Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
-function today(){ return new Date().toISOString().slice(0,10); }
-function fmtDt(iso) {
-  if (!iso) return '—';
+function uid()  {return Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
+function today(){return new Date().toISOString().slice(0,10);}
+function fmtDt(iso){
+  if(!iso) return '—';
   const d=new Date(iso);
   return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})
        +' '+d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
 }
-function esc(s){ const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
-function dl(blob,name){ const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();URL.revokeObjectURL(a.href); }
-function loadScript(src){ return new Promise((res,rej)=>{ const s=document.createElement('script');s.src=src;s.onload=res;s.onerror=rej;document.head.appendChild(s); }); }
+function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML;}
+function dl(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();URL.revokeObjectURL(a.href);}
+function loadScript(src){return new Promise((res,rej)=>{const s=document.createElement('script');s.src=src;s.onload=res;s.onerror=rej;document.head.appendChild(s);});}
 </script>
 </body>
 </html>
