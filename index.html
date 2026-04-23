@@ -39,26 +39,26 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
 #auth-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;
   background:linear-gradient(135deg,#1e3a8a,#2563eb);padding:20px}
 #auth-box{background:#fff;border-radius:14px;padding:32px 28px;
-  width:100%;max-width:380px;box-shadow:0 20px 60px rgba(0,0,0,.25)}
-.auth-logo{width:52px;height:52px;background:var(--primary);border-radius:13px;
-  display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 12px}
+  width:100%;max-width:360px;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+.auth-logo{width:56px;height:56px;background:var(--primary);border-radius:14px;
+  display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 14px}
 .auth-title{font-size:20px;font-weight:800;text-align:center;margin-bottom:4px}
-.auth-sub{font-size:13px;color:var(--muted);text-align:center;margin-bottom:24px}
+.auth-sub{font-size:13px;color:var(--muted);text-align:center;margin-bottom:28px;line-height:1.5}
 .auth-field{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
-.auth-field label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.auth-field label{font-size:11px;font-weight:600;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.04em}
 .auth-field input{height:44px;padding:0 13px;border:1.5px solid var(--border);
   border-radius:8px;font-size:14px;outline:none;transition:border-color .15s}
 .auth-field input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,.12)}
-.auth-btns{display:flex;gap:10px;margin-top:6px}
-.auth-btns button{flex:1;height:44px;border-radius:8px;border:none;font-size:14px;
-  font-weight:700;cursor:pointer;transition:all .15s}
-.btn-login {background:var(--primary);color:#fff}.btn-login:hover{background:var(--ph)}
-.btn-signup{background:#fff;color:var(--primary);border:2px solid var(--primary)!important}
-.btn-signup:hover{background:var(--purplel)}
+.auth-btn{width:100%;height:46px;border-radius:8px;border:none;font-size:15px;
+  font-weight:700;cursor:pointer;background:var(--primary);color:#fff;
+  transition:all .15s;margin-top:4px}
+.auth-btn:hover{background:var(--ph)}
 .auth-msg{font-size:12.5px;font-weight:500;text-align:center;margin-top:12px;
   padding:8px 12px;border-radius:7px;display:none}
 .auth-msg.err{display:block;background:#fef2f2;color:var(--danger);border:1px solid #fecaca}
 .auth-msg.ok {display:block;background:#f0fdf4;color:var(--success);border:1px solid #bbf7d0}
+.auth-footer{text-align:center;margin-top:16px;font-size:12px;color:var(--muted)}
 
 /* ── HEADER ── */
 header{background:var(--card);border-bottom:1px solid var(--border);padding:0 16px;
@@ -79,17 +79,19 @@ header{background:var(--card);border-bottom:1px solid var(--border);padding:0 16
 .pill-green{background:#f0fdf4;border:1px solid #bbf7d0;color:var(--success)}
 .pill-dot{width:6px;height:6px;border-radius:50%;background:currentColor;animation:pulse 1.4s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
-.logout-btn{height:32px;padding:0 11px;border-radius:8px;border:1px solid #fca5a5;
-  background:#fff;color:var(--danger);font-size:12px;font-weight:600;
-  cursor:pointer;display:flex;align-items:center;gap:4px;transition:all .15s}
-.logout-btn:hover{background:#fef2f2}
-
-/* sync status pill in header */
 .sync-pill{font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;
   display:flex;align-items:center;gap:4px;white-space:nowrap}
 .sp-ok  {background:#f0fdf4;border:1px solid #bbf7d0;color:var(--success)}
 .sp-busy{background:#fef3c7;border:1px solid #fde68a;color:var(--warn)}
 .sp-err {background:#fef2f2;border:1px solid #fecaca;color:var(--danger)}
+.icon-btn{height:34px;width:34px;border-radius:8px;border:1px solid var(--border);
+  background:#fff;color:var(--muted);font-size:16px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:all .15s}
+.icon-btn:hover{background:var(--bg);color:var(--text)}
+.logout-btn{height:34px;padding:0 11px;border-radius:8px;border:1px solid #fca5a5;
+  background:#fff;color:var(--danger);font-size:12px;font-weight:600;
+  cursor:pointer;display:flex;align-items:center;gap:4px;transition:all .15s}
+.logout-btn:hover{background:#fef2f2}
 
 /* ── LAYOUT ── */
 .wrap{max-width:1360px;margin:0 auto;padding:16px}
@@ -109,13 +111,13 @@ header{background:var(--card);border-bottom:1px solid var(--border);padding:0 16
 .sync-panel{background:linear-gradient(135deg,#ede9fe,#f5f3ff);
   border:1px solid var(--purpleb);border-radius:11px;margin-bottom:16px;box-shadow:var(--sh)}
 .sync-header{display:flex;align-items:center;justify-content:space-between;
-  padding:12px 16px;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
+  padding:12px 16px;cursor:pointer;user-select:none}
 .sync-header:hover{background:rgba(124,58,237,.04);border-radius:11px}
 .sync-header-left{display:flex;align-items:center;gap:8px}
 .sync-header-title{font-size:13px;font-weight:700;color:var(--purple)}
 .sync-header-badge{font-size:11px;color:#7c3aed;background:#ddd6fe;
   padding:2px 8px;border-radius:20px;font-weight:600}
-.sync-toggle{font-size:18px;color:var(--purple);transition:transform .25s;line-height:1}
+.sync-toggle{font-size:18px;color:var(--purple);transition:transform .25s}
 .sync-toggle.open{transform:rotate(180deg)}
 .sync-body{padding:0 16px 16px;display:none}
 .sync-body.open{display:block}
@@ -145,16 +147,21 @@ header{background:var(--card);border-bottom:1px solid var(--border);padding:0 16
 /* ── FORM ── */
 .form-row{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end}
 .fg{display:flex;flex-direction:column;gap:4px}
-.fg label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.fg label{font-size:11px;font-weight:600;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.05em}
 .fg input,.fg select{height:44px;padding:0 12px;border:1px solid var(--border);
   border-radius:8px;font-size:14px;color:var(--text);background:#fff;
   outline:none;transition:border-color .15s,box-shadow .15s}
-#barcode-input{min-width:200px;font-size:15px;font-family:monospace;letter-spacing:.04em;border-width:2px}
+#barcode-input{min-width:200px;font-size:15px;font-family:monospace;
+  letter-spacing:.04em;border-width:2px}
 #barcode-input:focus{border-color:var(--primary);box-shadow:0 0 0 4px rgba(37,99,235,.13)}
-#barcode-input.flash-ok {border-color:var(--success);background:#f0fdf4;box-shadow:0 0 0 4px rgba(22,163,74,.15)}
-#barcode-input.flash-err{border-color:var(--danger);background:#fef2f2;box-shadow:0 0 0 4px rgba(220,38,38,.13)}
+#barcode-input.flash-ok {border-color:var(--success);background:#f0fdf4;
+  box-shadow:0 0 0 4px rgba(22,163,74,.15)}
+#barcode-input.flash-err{border-color:var(--danger);background:#fef2f2;
+  box-shadow:0 0 0 4px rgba(220,38,38,.13)}
 #customer-input{min-width:180px}
-.fg input:focus,.fg select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,.12)}
+.fg input:focus,.fg select:focus{border-color:var(--primary);
+  box-shadow:0 0 0 3px rgba(37,99,235,.12)}
 .bc-row{display:flex;gap:8px;align-items:stretch}
 .bc-row input{flex:1;min-width:0}
 .cam-trigger{height:44px;width:48px;border-radius:8px;border:2px solid var(--primary);
@@ -179,10 +186,14 @@ header{background:var(--card);border-bottom:1px solid var(--border);padding:0 16
 .btn-xs{height:30px;padding:0 10px;font-size:11.5px}
 .btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--ph)}
 .btn-success{background:var(--success);color:#fff}.btn-success:hover{background:#15803d}
-.btn-outline{background:#fff;color:var(--text);border:1px solid var(--border)}.btn-outline:hover{background:var(--bg)}
-.btn-danger{background:#fff;color:var(--danger);border:1px solid #fca5a5}.btn-danger:hover{background:#fef2f2}
+.btn-outline{background:#fff;color:var(--text);border:1px solid var(--border)}
+.btn-outline:hover{background:var(--bg)}
+.btn-danger{background:var(--danger);color:#fff}.btn-danger:hover{background:#b91c1c}
+.btn-danger-soft{background:#fff;color:var(--danger);border:1px solid #fca5a5}
+.btn-danger-soft:hover{background:#fef2f2}
 .btn-purple{background:var(--purple);color:#fff}.btn-purple:hover{background:#6d28d9}
-.btn-purplel{background:#fff;color:var(--purple);border:1px solid var(--purpleb)}.btn-purplel:hover{background:var(--purplel)}
+.btn-purplel{background:#fff;color:var(--purple);border:1px solid var(--purpleb)}
+.btn-purplel:hover{background:var(--purplel)}
 .btn:disabled{opacity:.45;cursor:not-allowed}
 
 /* ── ACTION BAR ── */
@@ -237,18 +248,69 @@ tr.row-new{animation:rowFlash .9s ease}
 @keyframes tout{from{opacity:1}to{opacity:0;transform:translateX(110%)}}
 
 /* ── MODALS ── */
-.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);
   z-index:1000;align-items:center;justify-content:center;padding:16px}
 .modal-bg.open{display:flex}
-.modal{background:#fff;border-radius:12px;padding:24px;max-width:420px;
-  width:100%;box-shadow:0 20px 60px rgba(0,0,0,.2)}
-.modal h3{font-size:15px;margin-bottom:7px}
+.modal{background:#fff;border-radius:14px;padding:24px;max-width:440px;
+  width:100%;box-shadow:0 20px 60px rgba(0,0,0,.25);max-height:90vh;overflow-y:auto}
+.modal h3{font-size:16px;font-weight:700;margin-bottom:6px;
+  display:flex;align-items:center;gap:8px}
 .modal p{font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.6}
-.modal-btns{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
+.modal-btns{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:16px}
+.modal-field{display:flex;flex-direction:column;gap:5px;margin-bottom:13px}
+.modal-field label{font-size:11px;font-weight:600;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.04em}
+.modal-field input{height:42px;padding:0 12px;border:1.5px solid var(--border);
+  border-radius:8px;font-size:14px;outline:none;transition:border-color .15s}
+.modal-field input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+
+/* ── SETTINGS MODAL ── */
+.settings-menu{display:flex;flex-direction:column;gap:8px;margin-bottom:8px}
+.settings-item{display:flex;align-items:center;justify-content:space-between;
+  padding:14px 16px;border:1px solid var(--border);border-radius:10px;
+  cursor:pointer;transition:all .15s;background:#fff}
+.settings-item:hover{background:#fef2f2;border-color:#fca5a5}
+.settings-item-l{display:flex;align-items:center;gap:12px}
+.settings-item-icon{width:38px;height:38px;border-radius:9px;background:#fef2f2;
+  display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.settings-item-title{font-size:14px;font-weight:600;color:var(--text)}
+.settings-item-desc{font-size:11.5px;color:var(--muted);margin-top:2px}
+.settings-item-arrow{color:var(--muted);font-size:16px}
+
+/* ── DELETE FLOW ── */
+.del-step{display:none}.del-step.active{display:block}
+
+/* warning box */
+.warn-box{background:#fef3c7;border:1px solid #fde68a;border-radius:10px;
+  padding:14px 16px;margin-bottom:16px}
+.warn-box-title{font-size:13.5px;font-weight:700;color:#92400e;
+  display:flex;align-items:center;gap:7px;margin-bottom:6px}
+.warn-box p{font-size:12.5px;color:#92400e;margin-bottom:0;line-height:1.6}
+
+/* delete record list */
+.del-list{max-height:280px;overflow-y:auto;border:1px solid var(--border);
+  border-radius:9px;margin-bottom:14px}
+.del-item{display:flex;align-items:center;gap:12px;padding:10px 13px;
+  border-bottom:1px solid #f1f3f6;transition:background .1s}
+.del-item:last-child{border-bottom:none}
+.del-item:hover{background:#fef2f2}
+.del-item input[type=checkbox]{width:16px;height:16px;cursor:pointer;flex-shrink:0;
+  accent-color:var(--danger)}
+.del-item-info{flex:1;min-width:0}
+.del-item-bc{font-family:monospace;font-size:12.5px;font-weight:600;color:var(--text)}
+.del-item-meta{font-size:11px;color:var(--muted);margin-top:2px}
+.del-select-all{display:flex;align-items:center;gap:8px;padding:10px 13px;
+  background:#f8f9fb;border-bottom:1px solid var(--border);
+  font-size:12.5px;font-weight:600;color:var(--text);cursor:pointer}
+.del-select-all input[type=checkbox]{width:16px;height:16px;accent-color:var(--danger)}
+.del-count{font-size:12px;color:var(--danger);font-weight:600;margin-bottom:10px}
+
+/* import */
 .import-ta{width:100%;height:120px;border:1px solid var(--border);border-radius:8px;
   padding:10px;font-size:12px;font-family:monospace;outline:none;resize:vertical}
 .import-ta:focus{border-color:var(--purple);box-shadow:0 0 0 3px rgba(124,58,237,.12)}
-.or-divider{display:flex;align-items:center;gap:10px;margin:10px 0;color:var(--muted);font-size:12px}
+.or-divider{display:flex;align-items:center;gap:10px;margin:10px 0;
+  color:var(--muted);font-size:12px}
 .or-divider::before,.or-divider::after{content:'';flex:1;height:1px;background:var(--border)}
 .file-drop{border:2px dashed var(--purpleb);border-radius:8px;padding:16px;text-align:center;
   cursor:pointer;transition:all .15s;background:var(--purplel)}
@@ -260,7 +322,8 @@ tr.row-new{animation:rowFlash .9s ease}
 .backup-item{display:flex;align-items:center;justify-content:space-between;
   background:#f8f9fb;border:1px solid var(--border);border-radius:8px;padding:9px 12px;gap:8px}
 .backup-item-info{flex:1;min-width:0}
-.backup-item-name{font-size:12.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.backup-item-name{font-size:12.5px;font-weight:600;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
 .backup-item-meta{font-size:11px;color:var(--muted);margin-top:2px}
 .backup-item-btns{display:flex;gap:6px;flex-shrink:0}
 .no-backups{text-align:center;padding:20px;color:var(--muted);font-size:13px}
@@ -271,23 +334,27 @@ tr.row-new{animation:rowFlash .9s ease}
 .cam-wrap{display:flex;flex-direction:column;width:100%;height:100%;
   max-width:540px;margin:0 auto;background:#000;position:relative}
 .cam-topbar{display:flex;align-items:center;justify-content:space-between;
-  padding:12px 16px;background:rgba(0,0,0,.7);position:absolute;top:0;left:0;right:0;z-index:10}
+  padding:12px 16px;background:rgba(0,0,0,.7);
+  position:absolute;top:0;left:0;right:0;z-index:10}
 .cam-topbar-title{color:#fff;font-size:14px;font-weight:600}
 .cam-topbar-mode{padding:3px 10px;border-radius:20px;font-size:12px;font-weight:700}
 .cam-mode-out{background:#3b82f6;color:#fff}.cam-mode-in{background:#22c55e;color:#fff}
-.cam-close{width:34px;height:34px;border-radius:50%;border:none;background:rgba(255,255,255,.15);
-  color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.cam-close{width:34px;height:34px;border-radius:50%;border:none;
+  background:rgba(255,255,255,.15);color:#fff;font-size:18px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center}
 .cam-close:hover{background:rgba(255,255,255,.3)}
 #cam-video{width:100%;height:100%;object-fit:cover;display:block}
-.cam-finder{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
+.cam-finder{position:absolute;inset:0;display:flex;align-items:center;
+  justify-content:center;pointer-events:none}
 .cam-box{width:72%;max-width:280px;aspect-ratio:1;position:relative}
 .cam-corner{position:absolute;width:22px;height:22px;border-color:#fff;border-style:solid}
 .cam-corner.tl{top:0;left:0;border-width:3px 0 0 3px;border-radius:3px 0 0}
 .cam-corner.tr{top:0;right:0;border-width:3px 3px 0 0;border-radius:0 3px 0 0}
 .cam-corner.bl{bottom:0;left:0;border-width:0 0 3px 3px;border-radius:0 0 0 3px}
 .cam-corner.br{bottom:0;right:0;border-width:0 3px 3px 0;border-radius:0 0 3px 0}
-.cam-scan-line{position:absolute;left:4px;right:4px;height:2px;background:rgba(37,99,235,.9);
-  box-shadow:0 0 8px rgba(37,99,235,.8);animation:scanMove 2s linear infinite}
+.cam-scan-line{position:absolute;left:4px;right:4px;height:2px;
+  background:rgba(37,99,235,.9);box-shadow:0 0 8px rgba(37,99,235,.8);
+  animation:scanMove 2s linear infinite}
 @keyframes scanMove{0%{top:4px}50%{top:calc(100% - 6px)}100%{top:4px}}
 .cam-result{position:absolute;bottom:80px;left:50%;transform:translateX(-50%);
   background:rgba(22,163,74,.92);color:#fff;padding:10px 20px;border-radius:30px;
@@ -311,29 +378,29 @@ tr.row-new{animation:rowFlash .9s ease}
 </head>
 <body>
 
-<!-- AUTH SCREEN -->
+<!-- ══════════ AUTH SCREEN ══════════ -->
 <div id="auth-screen">
   <div id="auth-box">
     <div class="auth-logo">📦</div>
     <div class="auth-title">Toner Inventory Tracker</div>
-    <div class="auth-sub">Sign in or create an account to continue</div>
+    <div class="auth-sub">Enter your credentials to access the system</div>
     <div class="auth-field">
       <label>Email Address</label>
       <input type="email" id="auth-email" placeholder="you@example.com" autocomplete="email">
     </div>
     <div class="auth-field">
       <label>Password</label>
-      <input type="password" id="auth-password" placeholder="Your password" autocomplete="current-password">
+      <input type="password" id="auth-password" placeholder="Your password"
+             autocomplete="current-password"
+             onkeydown="if(event.key==='Enter') login()">
     </div>
-    <div class="auth-btns">
-      <button class="btn-login"  onclick="login()">🔐 Login</button>
-      <button class="btn-signup" onclick="signup()">✏️ Sign Up</button>
-    </div>
+    <button class="auth-btn" onclick="login()">🔐 Login</button>
     <div class="auth-msg" id="auth-msg"></div>
+    <div class="auth-footer">Contact your administrator to get access.</div>
   </div>
 </div>
 
-<!-- MAIN APP -->
+<!-- ══════════ MAIN APP ══════════ -->
 <div id="main-app" style="display:none">
 <header>
   <div class="hd-l">
@@ -348,6 +415,8 @@ tr.row-new{animation:rowFlash .9s ease}
     <div class="sync-pill sp-ok" id="sync-pill">✅ Synced</div>
     <div class="hd-user" id="hd-user"></div>
     <div class="hd-date" id="hd-date"></div>
+    <!-- Settings gear button -->
+    <button class="icon-btn" onclick="openSettings()" title="Settings">⚙️</button>
     <button class="logout-btn" onclick="logout()">🚪 Logout</button>
   </div>
 </header>
@@ -370,12 +439,12 @@ tr.row-new{animation:rowFlash .9s ease}
       <div class="sync-header-left">
         <span>🔄</span>
         <span class="sync-header-title">Backup, Export &amp; Restore</span>
-        <span class="sync-header-badge">Click to expand</span>
+        <span class="sync-header-badge" id="sync-badge">Click to expand</span>
       </div>
       <span class="sync-toggle" id="sync-toggle">⌄</span>
     </div>
     <div class="sync-body" id="sync-body">
-      <div class="sync-desc">Export a backup file and share it to sync between devices. Use Local Snapshots for quick in-browser saves.</div>
+      <div class="sync-desc">Export a backup and share it to sync between devices. Use Local Snapshots for quick in-browser saves.</div>
       <div class="sync-grid">
         <div class="sync-box">
           <div class="sync-box-title">📤 Export / Share</div>
@@ -408,7 +477,8 @@ tr.row-new{animation:rowFlash .9s ease}
   <!-- SCAN PANEL -->
   <div class="panel">
     <div class="panel-title">📷 Scan / Add Entry
-      <span style="width:8px;height:8px;border-radius:50%;background:#22c55e;display:inline-block;animation:pulse 1.4s infinite"></span>
+      <span style="width:8px;height:8px;border-radius:50%;background:#22c55e;
+        display:inline-block;animation:pulse 1.4s infinite"></span>
     </div>
     <div class="lsb" id="lsb"><span id="lsb-txt"></span></div>
     <div class="form-row">
@@ -439,9 +509,11 @@ tr.row-new{animation:rowFlash .9s ease}
       </div>
     </div>
     <div class="scan-hint">
-      💡 <strong>USB/Bluetooth scanner</strong> — plug in &amp; scan, auto-submits on <span class="kbd">Enter</span> &nbsp;|&nbsp;
+      💡 <strong>USB/Bluetooth scanner</strong> — plug in &amp; scan, auto-submits on
+      <span class="kbd">Enter</span> &nbsp;|&nbsp;
       <strong>Mobile</strong> — tap 📷 for camera &nbsp;|&nbsp;
-      <span class="kbd">Tab</span> → customer &nbsp;|&nbsp; <span class="kbd">Esc</span> clears
+      <span class="kbd">Tab</span> → customer &nbsp;|&nbsp;
+      <span class="kbd">Esc</span> clears
     </div>
   </div>
 
@@ -455,10 +527,6 @@ tr.row-new{animation:rowFlash .9s ease}
         <option value="OUT">OUT</option>
         <option value="RETURNED">RETURNED</option>
       </select>
-    </div>
-    <div class="act-r">
-      <button class="btn btn-outline btn-sm" onclick="loadSample()">🧪 Sample Data</button>
-      <button class="btn btn-danger  btn-sm" onclick="openClearModal()">🗑 Clear All</button>
     </div>
   </div>
 
@@ -484,12 +552,98 @@ tr.row-new{animation:rowFlash .9s ease}
 </div>
 </div>
 
+<!-- ══════════ SETTINGS MODAL ══════════ -->
+<div class="modal-bg" id="settings-modal">
+  <div class="modal" style="max-width:400px">
+    <h3>⚙️ Settings</h3>
+    <p>Manage your account and data.</p>
+    <div class="settings-menu">
+      <div class="settings-item" onclick="startDeleteFlow()">
+        <div class="settings-item-l">
+          <div class="settings-item-icon">🗑️</div>
+          <div>
+            <div class="settings-item-title">Delete Records</div>
+            <div class="settings-item-desc">Permanently delete selected or all records</div>
+          </div>
+        </div>
+        <span class="settings-item-arrow">›</span>
+      </div>
+    </div>
+    <div class="modal-btns">
+      <button class="btn btn-outline btn-sm" onclick="closeSettings()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ DELETE FLOW MODAL ══════════ -->
+<div class="modal-bg" id="delete-modal">
+  <div class="modal" style="max-width:480px">
+
+    <!-- STEP 1: Warning -->
+    <div class="del-step active" id="del-s1">
+      <h3>🗑️ Delete Records</h3>
+      <div class="warn-box">
+        <div class="warn-box-title">⚠️ Important Warning</div>
+        <p>Deleted records are <strong>permanently removed</strong> from the cloud and cannot be recovered.<br><br>
+        Please <strong>export a backup</strong> before proceeding.</p>
+      </div>
+      <button class="btn btn-purplel btn-sm" style="width:100%;margin-bottom:10px"
+              onclick="exportJSON()">💾 Export Backup First (Recommended)</button>
+      <div class="modal-btns">
+        <button class="btn btn-outline btn-sm" onclick="closeDeleteModal()">Cancel</button>
+        <button class="btn btn-danger btn-sm" onclick="delGoStep2()">I Understand — Proceed</button>
+      </div>
+    </div>
+
+    <!-- STEP 2: Re-authenticate -->
+    <div class="del-step" id="del-s2">
+      <h3>🔐 Confirm Your Identity</h3>
+      <p>Enter your login credentials to authorize this deletion.</p>
+      <div class="modal-field">
+        <label>Email</label>
+        <input type="email" id="del-email" placeholder="Your email" autocomplete="off">
+      </div>
+      <div class="modal-field">
+        <label>Password</label>
+        <input type="password" id="del-pass" placeholder="Your password"
+               onkeydown="if(event.key==='Enter') delVerifyAuth()">
+      </div>
+      <div class="auth-msg" id="del-auth-msg" style="margin-bottom:10px"></div>
+      <div class="modal-btns">
+        <button class="btn btn-outline btn-sm" onclick="closeDeleteModal()">Cancel</button>
+        <button class="btn btn-danger btn-sm" id="del-verify-btn" onclick="delVerifyAuth()">Verify &amp; Continue</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: Select records -->
+    <div class="del-step" id="del-s3">
+      <h3>🗑️ Select Records to Delete</h3>
+      <p>Choose the records you want to permanently delete.</p>
+      <div class="del-count" id="del-selected-count">0 records selected</div>
+      <div class="del-list">
+        <label class="del-select-all">
+          <input type="checkbox" id="del-select-all" onchange="toggleSelectAll(this.checked)">
+          Select All Records
+        </label>
+        <div id="del-record-list"></div>
+      </div>
+      <div class="modal-btns">
+        <button class="btn btn-outline btn-sm" onclick="closeDeleteModal()">Cancel</button>
+        <button class="btn btn-danger btn-sm" id="del-confirm-btn"
+                onclick="doDeleteSelected()" disabled>🗑️ Delete Selected</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 <!-- IMPORT MODAL -->
 <div class="modal-bg" id="import-modal">
   <div class="modal">
     <h3>⬆️ Import Backup</h3>
     <p>Select a <strong>.json</strong> backup file or paste JSON text.</p>
-    <div class="file-drop" onclick="document.getElementById('file-import-input').click()" id="file-drop-zone">
+    <div class="file-drop" onclick="document.getElementById('file-import-input').click()"
+         id="file-drop-zone">
       <div style="font-size:28px">📂</div>
       <p>Tap to choose .json file</p><span>or drag and drop</span>
     </div>
@@ -516,24 +670,11 @@ tr.row-new{animation:rowFlash .9s ease}
 <div class="modal-bg" id="snap-modal">
   <div class="modal" style="max-width:460px">
     <h3>💾 Local Snapshots</h3>
-    <p>Snapshots saved in <strong>this browser only</strong>. Restore any snapshot instantly.</p>
+    <p>Snapshots saved in <strong>this browser only</strong>.</p>
     <div class="backup-list" id="snap-list"></div>
     <div class="modal-btns">
       <button class="btn btn-outline btn-sm" onclick="closeSnapshotModal()">Close</button>
       <button class="btn btn-purple btn-sm" onclick="saveSnapshot()">💾 Save New Snapshot</button>
-    </div>
-  </div>
-</div>
-
-<!-- CLEAR MODAL -->
-<div class="modal-bg" id="clear-modal">
-  <div class="modal">
-    <h3>⚠️ Clear All Records?</h3>
-    <p>This will delete every record from Firestore cloud. This cannot be undone.</p>
-    <div class="modal-btns">
-      <button class="btn btn-outline btn-sm" onclick="closeClearModal()">Cancel</button>
-      <button class="btn btn-purple  btn-sm" onclick="exportJSON()">💾 Backup First</button>
-      <button class="btn btn-danger  btn-sm" onclick="clearAll()">🗑 Clear Anyway</button>
     </div>
   </div>
 </div>
@@ -575,21 +716,6 @@ function showAuthMsg(msg, type) {
   const el = document.getElementById('auth-msg');
   el.textContent = msg; el.className = 'auth-msg ' + type;
 }
-function signup() {
-  const email = document.getElementById('auth-email').value.trim();
-  const pass  = document.getElementById('auth-password').value;
-  if (!email || !pass) { showAuthMsg('Please enter email and password.','err'); return; }
-  if (pass.length < 6) { showAuthMsg('Password must be at least 6 characters.','err'); return; }
-  showAuthMsg('Creating account…','ok');
-  auth.createUserWithEmailAndPassword(email, pass)
-    .catch(err => {
-      const m = {'auth/email-already-in-use':'Email already registered. Please login.',
-        'auth/invalid-email':'Invalid email address.',
-        'auth/weak-password':'Password must be at least 6 characters.',
-        'auth/network-request-failed':'Network error. Check your connection.'};
-      showAuthMsg(m[err.code] || err.message,'err');
-    });
-}
 function login() {
   const email = document.getElementById('auth-email').value.trim();
   const pass  = document.getElementById('auth-password').value;
@@ -597,18 +723,20 @@ function login() {
   showAuthMsg('Signing in…','ok');
   auth.signInWithEmailAndPassword(email, pass)
     .catch(err => {
-      const m = {'auth/user-not-found':'No account found. Please sign up first.',
-        'auth/wrong-password':'Incorrect password.',
-        'auth/invalid-credential':'Invalid email or password.',
-        'auth/too-many-requests':'Too many attempts. Please wait.',
-        'auth/network-request-failed':'Network error. Check your connection.'};
-      showAuthMsg(m[err.code] || err.message,'err');
+      const m = {
+        'auth/user-not-found':     'No account found. Contact your administrator.',
+        'auth/wrong-password':     'Incorrect password. Please try again.',
+        'auth/invalid-credential': 'Invalid email or password.',
+        'auth/too-many-requests':  'Too many attempts. Please wait and try again.',
+        'auth/network-request-failed': 'Network error. Check your connection.'
+      };
+      showAuthMsg(m[err.code] || err.message, 'err');
     });
 }
 function logout() { auth.signOut(); }
 
 // ═══════════════════════════════════════════════════
-//  AUTH STATE — single source of truth
+//  AUTH STATE
 // ═══════════════════════════════════════════════════
 let currentUser = null;
 let unsubscribeFirestore = null;
@@ -641,77 +769,167 @@ let snapshots = JSON.parse(localStorage.getItem('toner_snapshots') || '[]');
 let mode = 'OUT', lastId = null, lsbTimer;
 
 // ═══════════════════════════════════════════════════
-//  FIRESTORE — save & load
+//  FIRESTORE
 // ═══════════════════════════════════════════════════
 function userCol() {
-  // Each user's data stored under their own UID — completely isolated
   return db.collection('users').doc(currentUser.uid).collection('records');
 }
-
-function setSyncStatus(status) {
+function setSyncStatus(s) {
   const el = document.getElementById('sync-pill');
-  if (status === 'ok')   { el.className='sync-pill sp-ok';   el.textContent='✅ Synced'; }
-  if (status === 'busy') { el.className='sync-pill sp-busy'; el.textContent='⏳ Saving…'; }
-  if (status === 'err')  { el.className='sync-pill sp-err';  el.textContent='❌ Sync Error'; }
+  if (s==='ok')   { el.className='sync-pill sp-ok';   el.textContent='✅ Synced'; }
+  if (s==='busy') { el.className='sync-pill sp-busy'; el.textContent='⏳ Saving…'; }
+  if (s==='err')  { el.className='sync-pill sp-err';  el.textContent='❌ Sync Error'; }
 }
-
-// Real-time listener — any change in Firestore updates the screen instantly
 function loadFromFirestore() {
   setSyncStatus('busy');
   if (unsubscribeFirestore) unsubscribeFirestore();
-
-  unsubscribeFirestore = userCol()
-    .orderBy('issueDate', 'asc')
-    .onSnapshot(snapshot => {
-      records = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
-      // Rebuild customer list from records
-      customers = [...new Set(records.map(r => r.customer).filter(Boolean))];
-      updateCustList();
-      renderTable();
-      setSyncStatus('ok');
-    }, err => {
-      console.error('Firestore error:', err);
-      setSyncStatus('err');
-      toast('Cloud sync error — check connection.','err');
-    });
+  unsubscribeFirestore = userCol().orderBy('issueDate','asc').onSnapshot(snap => {
+    records = snap.docs.map(d => ({ id:d.id, ...d.data() }));
+    customers = [...new Set(records.map(r=>r.customer).filter(Boolean))];
+    updateCustList(); renderTable(); setSyncStatus('ok');
+  }, err => { console.error(err); setSyncStatus('err'); toast('Cloud sync error.','err'); });
 }
-
 async function saveToFirestore(rec) {
   setSyncStatus('busy');
-  try {
-    await userCol().doc(rec.id).set(rec);
-    setSyncStatus('ok');
-  } catch(err) {
-    setSyncStatus('err');
-    toast('Failed to save to cloud.','err');
-    throw err;
-  }
+  await userCol().doc(rec.id).set(rec);
+  setSyncStatus('ok');
 }
-
 async function updateInFirestore(id, data) {
   setSyncStatus('busy');
-  try {
-    await userCol().doc(id).update(data);
-    setSyncStatus('ok');
-  } catch(err) {
-    setSyncStatus('err');
-    toast('Failed to update cloud record.','err');
-    throw err;
-  }
+  await userCol().doc(id).update(data);
+  setSyncStatus('ok');
 }
 
-async function deleteAllFromFirestore() {
-  setSyncStatus('busy');
+// ═══════════════════════════════════════════════════
+//  SETTINGS
+// ═══════════════════════════════════════════════════
+function openSettings()  { document.getElementById('settings-modal').classList.add('open'); }
+function closeSettings() { document.getElementById('settings-modal').classList.remove('open'); }
+document.getElementById('settings-modal').addEventListener('click', e => {
+  if (e.target===e.currentTarget) closeSettings();
+});
+
+// ═══════════════════════════════════════════════════
+//  DELETE FLOW
+// ═══════════════════════════════════════════════════
+function startDeleteFlow() {
+  closeSettings();
+  // Reset all steps
+  document.querySelectorAll('.del-step').forEach(s => s.classList.remove('active'));
+  document.getElementById('del-s1').classList.add('active');
+  document.getElementById('del-email').value = '';
+  document.getElementById('del-pass').value  = '';
+  const msg = document.getElementById('del-auth-msg');
+  msg.className='auth-msg'; msg.textContent='';
+  document.getElementById('delete-modal').classList.add('open');
+}
+function closeDeleteModal() {
+  document.getElementById('delete-modal').classList.remove('open');
+}
+document.getElementById('delete-modal').addEventListener('click', e => {
+  if (e.target===e.currentTarget) closeDeleteModal();
+});
+
+function delGoStep2() {
+  document.getElementById('del-s1').classList.remove('active');
+  document.getElementById('del-s2').classList.add('active');
+  setTimeout(() => document.getElementById('del-email').focus(), 100);
+}
+
+async function delVerifyAuth() {
+  const email = document.getElementById('del-email').value.trim();
+  const pass  = document.getElementById('del-pass').value;
+  const msgEl = document.getElementById('del-auth-msg');
+  const btn   = document.getElementById('del-verify-btn');
+
+  if (!email || !pass) {
+    msgEl.textContent='Please enter your email and password.';
+    msgEl.className='auth-msg err'; return;
+  }
+
+  btn.disabled = true; btn.textContent = 'Verifying…';
+  msgEl.textContent='Verifying credentials…'; msgEl.className='auth-msg ok';
+
   try {
-    const snap = await userCol().get();
+    // Re-authenticate with Firebase to verify credentials
+    const cred = firebase.auth.EmailAuthProvider.credential(email, pass);
+    await currentUser.reauthenticateWithCredential(cred);
+
+    // Credentials verified — go to step 3
+    document.getElementById('del-s2').classList.remove('active');
+    document.getElementById('del-s3').classList.add('active');
+    buildDeleteList();
+  } catch(err) {
+    const m = {
+      'auth/wrong-password':     'Incorrect password. Please try again.',
+      'auth/invalid-credential': 'Invalid email or password.',
+      'auth/too-many-requests':  'Too many attempts. Please wait.'
+    };
+    msgEl.textContent = m[err.code] || 'Authentication failed. Try again.';
+    msgEl.className = 'auth-msg err';
+  }
+  btn.disabled = false; btn.textContent = 'Verify & Continue';
+}
+
+function buildDeleteList() {
+  const container = document.getElementById('del-record-list');
+  document.getElementById('del-select-all').checked = false;
+  updateDelCount();
+
+  if (!records.length) {
+    container.innerHTML = `<div style="padding:20px;text-align:center;color:var(--muted);font-size:13px">No records to delete.</div>`;
+    return;
+  }
+
+  container.innerHTML = records.slice().reverse().map(r => `
+    <label class="del-item">
+      <input type="checkbox" class="del-chk" data-id="${r.id}" onchange="updateDelCount()">
+      <div class="del-item-info">
+        <div class="del-item-bc">${esc(r.barcode)}</div>
+        <div class="del-item-meta">
+          ${esc(r.customer||'—')} &nbsp;·&nbsp;
+          ${fmtDt(r.issueDate)} &nbsp;·&nbsp;
+          <span style="color:${r.status==='OUT'?'#1d4ed8':'#15803d'};font-weight:600">${r.status}</span>
+        </div>
+      </div>
+    </label>`).join('');
+}
+
+function toggleSelectAll(checked) {
+  document.querySelectorAll('.del-chk').forEach(c => c.checked = checked);
+  updateDelCount();
+}
+
+function updateDelCount() {
+  const selected = document.querySelectorAll('.del-chk:checked').length;
+  const total    = document.querySelectorAll('.del-chk').length;
+  document.getElementById('del-selected-count').textContent =
+    `${selected} of ${total} record${total!==1?'s':''} selected`;
+  document.getElementById('del-confirm-btn').disabled = selected === 0;
+  // Sync select-all checkbox state
+  document.getElementById('del-select-all').checked = selected === total && total > 0;
+}
+
+async function doDeleteSelected() {
+  const checked = [...document.querySelectorAll('.del-chk:checked')];
+  if (!checked.length) return;
+
+  const btn = document.getElementById('del-confirm-btn');
+  btn.disabled = true; btn.textContent = '⏳ Deleting…';
+  setSyncStatus('busy');
+
+  try {
     const batch = db.batch();
-    snap.docs.forEach(d => batch.delete(d.ref));
+    checked.forEach(c => batch.delete(userCol().doc(c.dataset.id)));
     await batch.commit();
     setSyncStatus('ok');
+    closeDeleteModal();
+    toast(`🗑️ ${checked.length} record${checked.length!==1?'s':''} permanently deleted.`, 'warn');
   } catch(err) {
     setSyncStatus('err');
-    toast('Failed to clear cloud data.','err');
-    throw err;
+    toast('Delete failed. Please try again.','err');
+    btn.disabled = false;
+    btn.textContent = '🗑️ Delete Selected';
   }
 }
 
@@ -723,8 +941,7 @@ function toggleSync() {
   syncOpen = !syncOpen;
   document.getElementById('sync-body').classList.toggle('open', syncOpen);
   document.getElementById('sync-toggle').classList.toggle('open', syncOpen);
-  const badge = document.querySelector('.sync-header-badge');
-  badge.textContent = syncOpen ? 'Click to collapse' : 'Click to expand';
+  document.getElementById('sync-badge').textContent = syncOpen ? 'Click to collapse' : 'Click to expand';
 }
 
 // ═══════════════════════════════════════════════════
@@ -732,7 +949,7 @@ function toggleSync() {
 // ═══════════════════════════════════════════════════
 function initApp() {
   appReady = true;
-  const hd = document.getElementById('hd-date');
+  const hd  = document.getElementById('hd-date');
   const fmt = () => new Date().toLocaleDateString('en-GB',
     {weekday:'short',day:'numeric',month:'short',year:'numeric'});
   hd.textContent = fmt();
@@ -762,9 +979,7 @@ function initApp() {
     if (!['INPUT','SELECT','BUTTON','TEXTAREA','A','VIDEO','LABEL'].includes(e.target.tagName))
       returnFocus();
   });
-  setMode('OUT');
-  updateCustList();
-  renderTable();
+  setMode('OUT'); updateCustList(); renderTable();
   setTimeout(() => returnFocus(), 400);
 }
 
@@ -831,48 +1046,37 @@ function handleScan() {
     doOut(barcode, cust);
   } else doIn(barcode);
 }
-
 async function doOut(barcode, cust) {
   const dup = records.find(r => r.barcode===barcode && r.status==='OUT');
   if (dup) {
     feedback(`⚠️  "${barcode}" is already OUT to ${dup.customer}. Return it first.`,'warn');
-    toast('Duplicate OUT — item still with customer.','warn');
-    flashInput('err'); returnFocus(); return;
+    toast('Duplicate OUT.','warn'); flashInput('err'); returnFocus(); return;
   }
   const rec = { id:uid(), barcode, customer:cust,
     issueDate:new Date().toISOString(), returnDate:null, status:'OUT' };
   lastId = rec.id;
   try {
     await saveToFirestore(rec);
-    // Firestore listener will update records[] and renderTable() automatically
     feedback(`✅  OUT — "${barcode}" issued to ${cust}`,'ok');
     toast(`✅ "${barcode}" → ${cust}`,'ok');
-    flashInput('ok');
-    bc().value=''; cu().value=''; returnFocus();
-  } catch {}
+    flashInput('ok'); bc().value=''; cu().value=''; returnFocus();
+  } catch { toast('Failed to save.','err'); }
 }
-
 async function doIn(barcode) {
   const rec = records.find(r => r.barcode===barcode && r.status==='OUT');
   if (!rec) {
     const done = records.find(r => r.barcode===barcode && r.status==='RETURNED');
-    if (done) {
-      feedback(`ℹ️  "${barcode}" already returned on ${fmtDt(done.returnDate)}.`,'warn');
-      toast('Item already returned.','warn');
-    } else {
-      feedback(`❌  "${barcode}" not found in OUT records.`,'err');
-      toast('Barcode not found.','err');
-    }
+    if (done) { feedback(`ℹ️  "${barcode}" already returned on ${fmtDt(done.returnDate)}.`,'warn'); toast('Already returned.','warn'); }
+    else      { feedback(`❌  "${barcode}" not found in OUT records.`,'err'); toast('Barcode not found.','err'); }
     flashInput('err'); bc().value=''; returnFocus(); return;
   }
   lastId = rec.id;
-  const patch = { returnDate:new Date().toISOString(), status:'RETURNED' };
   try {
-    await updateInFirestore(rec.id, patch);
+    await updateInFirestore(rec.id, { returnDate:new Date().toISOString(), status:'RETURNED' });
     feedback(`✅  RETURNED — "${barcode}" from ${rec.customer}`,'ok');
     toast(`📥 "${barcode}" returned`,'ok');
     flashInput('ok'); bc().value=''; returnFocus();
-  } catch {}
+  } catch { toast('Failed to update.','err'); }
 }
 
 // ═══════════════════════════════════════════════════
@@ -882,13 +1086,13 @@ function renderTable() {
   const q  = document.getElementById('search-inp').value.trim().toLowerCase();
   const fs = document.getElementById('fil-status').value;
   const list = records
-    .filter(r => (!q || r.barcode.toLowerCase().includes(q) || (r.customer||'').toLowerCase().includes(q)) && (!fs || r.status===fs))
+    .filter(r => (!q||r.barcode.toLowerCase().includes(q)||(r.customer||'').toLowerCase().includes(q))&&(!fs||r.status===fs))
     .slice().reverse();
   const tbody = document.getElementById('tbl-body');
   const empty = document.getElementById('empty-state');
   if (!list.length) { tbody.innerHTML=''; empty.style.display=''; }
   else {
-    empty.style.display = 'none';
+    empty.style.display='none';
     tbody.innerHTML = list.map((r,i) => {
       const cls = (r.status==='RETURNED'?'row-ret ':'')+(r.id===lastId?'row-new':'');
       const badge = r.status==='OUT'
@@ -919,7 +1123,7 @@ function updateCustList() {
 // ═══════════════════════════════════════════════════
 function exportJSON() {
   if (!records.length) { toast('No data to export.','warn'); return; }
-  const payload = { exportedAt:new Date().toISOString(), appVersion:'v5-firestore', records, customers };
+  const payload = { exportedAt:new Date().toISOString(), appVersion:'v6', records, customers };
   dl(new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}), `toner_backup_${today()}.json`);
   toast('✅ Backup downloaded.','purple');
 }
@@ -955,27 +1159,25 @@ async function doImport() {
   const m = document.querySelector('input[name="imp-mode"]:checked').value;
   setSyncStatus('busy');
   try {
+    const batch = db.batch();
     if (m==='replace') {
-      await deleteAllFromFirestore();
+      const snap = await userCol().get();
+      snap.docs.forEach(d => batch.delete(d.ref));
     }
     const existing = new Set(records.map(r=>r.id));
-    const batch = db.batch();
-    let added = 0;
+    let added=0;
     imp.forEach(r => {
-      if (m==='replace' || !existing.has(r.id)) {
-        batch.set(userCol().doc(r.id), r);
-        added++;
-      }
+      if (m==='replace' || !existing.has(r.id)) { batch.set(userCol().doc(r.id),r); added++; }
     });
     await batch.commit();
     setSyncStatus('ok');
     closeImportModal();
-    toast(`✅ Imported ${added} records to cloud.`,'purple');
+    toast(`✅ Imported ${added} records.`,'purple');
   } catch { toast('Import failed.','err'); }
 }
 
 // ═══════════════════════════════════════════════════
-//  SNAPSHOTS (local browser only)
+//  SNAPSHOTS
 // ═══════════════════════════════════════════════════
 function saveSnapshot() {
   if (!records.length) { toast('No data to snapshot.','warn'); return; }
@@ -985,8 +1187,7 @@ function saveSnapshot() {
     records:JSON.parse(JSON.stringify(records)), customers:JSON.parse(JSON.stringify(customers)) });
   if (snapshots.length>20) snapshots=snapshots.slice(0,20);
   localStorage.setItem('toner_snapshots', JSON.stringify(snapshots));
-  renderTable();
-  toast(`💾 Snapshot saved (${records.length} records).`,'purple');
+  renderTable(); toast(`💾 Snapshot saved.`,'purple');
 }
 function openSnapshotModal()  { renderSnapList(); document.getElementById('snap-modal').classList.add('open'); }
 function closeSnapshotModal() { document.getElementById('snap-modal').classList.remove('open'); returnFocus(); }
@@ -1009,13 +1210,14 @@ async function restoreSnapshot(i) {
   if (!confirm(`Restore "${snapshots[i].name}"?\nThis replaces ALL cloud data.`)) return;
   setSyncStatus('busy');
   try {
-    await deleteAllFromFirestore();
+    const snap = await userCol().get();
     const batch = db.batch();
+    snap.docs.forEach(d => batch.delete(d.ref));
     snapshots[i].records.forEach(r => batch.set(userCol().doc(r.id), r));
     await batch.commit();
     setSyncStatus('ok');
     closeSnapshotModal();
-    toast(`✅ Restored ${snapshots[i].records.length} records to cloud.`,'purple');
+    toast(`✅ Restored ${snapshots[i].records.length} records.`,'purple');
   } catch { toast('Restore failed.','err'); }
 }
 function deleteSnapshot(i) {
@@ -1077,23 +1279,6 @@ function exportPDF() {
   doc.save(`toner_report_${today()}.pdf`);
   toast('PDF downloaded.','ok');
 }
-
-// ═══════════════════════════════════════════════════
-//  CLEAR
-// ═══════════════════════════════════════════════════
-function openClearModal()  { document.getElementById('clear-modal').classList.add('open'); }
-function closeClearModal() { document.getElementById('clear-modal').classList.remove('open'); returnFocus(); }
-async function clearAll() {
-  try {
-    await deleteAllFromFirestore();
-    lastId = null;
-    toast('All records cleared from cloud.','warn');
-    closeClearModal();
-  } catch {}
-}
-document.getElementById('clear-modal').addEventListener('click',e=>{
-  if(e.target===e.currentTarget) closeClearModal();
-});
 
 // ═══════════════════════════════════════════════════
 //  CAMERA
@@ -1172,35 +1357,6 @@ function setStatus(msg,hint){
 document.getElementById('cam-modal').addEventListener('click',e=>{
   if(e.target===document.getElementById('cam-modal')) closeCamera();
 });
-
-// ═══════════════════════════════════════════════════
-//  SAMPLE DATA
-// ═══════════════════════════════════════════════════
-async function loadSample(){
-  if(records.length){toast('Clear existing data first.','warn');return;}
-  const DAY=86400000,now=Date.now();
-  const samples=[
-    {bc:'TNR-2024-001',cu:'Al Futtaim Group',   st:'OUT',      i:5},
-    {bc:'TNR-2024-002',cu:'Emaar Properties',   st:'RETURNED', i:9,r:3},
-    {bc:'TNR-2024-003',cu:'Dubai Municipality', st:'OUT',      i:2},
-    {bc:'TNR-2024-004',cu:'DEWA',               st:'RETURNED', i:11,r:1},
-    {bc:'TNR-2024-005',cu:'Al Futtaim Group',   st:'OUT',      i:1},
-    {bc:'TNR-2024-006',cu:'RTA Dubai',          st:'RETURNED', i:7,r:2}
-  ];
-  setSyncStatus('busy');
-  try{
-    const batch=db.batch();
-    samples.forEach(s=>{
-      const rec={id:uid(),barcode:s.bc,customer:s.cu,
-        issueDate:new Date(now-s.i*DAY).toISOString(),
-        returnDate:s.r?new Date(now-s.r*DAY).toISOString():null,status:s.st};
-      batch.set(userCol().doc(rec.id),rec);
-    });
-    await batch.commit();
-    setSyncStatus('ok');
-    toast('Sample data loaded to cloud.','ok');
-  }catch{toast('Failed to load sample data.','err');}
-}
 
 // ═══════════════════════════════════════════════════
 //  UTILITIES
